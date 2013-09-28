@@ -1,5 +1,6 @@
 #include "decode.h"
 
+// include any erroneous libraries that are just temporary etc
 #include <stdio.h>
 
 // initialize the function that we are creating

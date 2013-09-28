@@ -1,7 +1,6 @@
-/*#include <avcodec.h>*/
+#include <libavcodec/avcodec.h>
 #include "decode.h"
-#include <stdio.h>
-/*#include <avformat.h>*/
+
 
 int main(int argc, char * argv[]) {
 
