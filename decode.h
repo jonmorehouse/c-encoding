@@ -1,6 +1,10 @@
 #ifndef DECODE_H
 #define DECODE_H
 
+// include proper ffmpeg related libraries
+#include "avcodec.h"
+#include "avformat.h"
+
 // declare a structure to export all of the functions that we are declaring in this namespace etc
 typedef struct {
 
