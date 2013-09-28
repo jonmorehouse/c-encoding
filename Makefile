@@ -1,11 +1,26 @@
 # declare dependencies etc
-INCLUDE = -lavcodec -lavformat
+FFMPEG_LIBS = libavdevice   \
+	      libavformat   \
+	      libavfilter   \
+	      libavcodec    \
+	      libswresample \
+	      libswscale    \
+	      libavutil     \
+		
+# initialize cflags and libraries 
+CFLAGS += -Wall -g
+CFLAGS := $(shell pkg-config --cflags $(FFMPEG_LIBS)) $(CFLAGS)
+LDLIBS := $(shell pkg-config --libs $(FFMPEG_LIBS)) $(LDLIBS)
 
-# initialize variables for calling correct compiler commands
-COMPILER = gcc
-COMPILERFLAGS = $(INCLUDE)
+decode.o: decode.c decode.h
 
-# now actually initialize our command etc
-all:
-	$(COMPILER) $(COMPILERFLAGS) *.c -o test.out
-	./test.out
+	gcc -c $(CFLAGS) $(LDFLAGS) decode.c
+	
+test: decode.o
+
+	gcc $(CFLAGS) $(LDLIBS) decode.o test.c -o test
+
+clean: 
+	rm *.o
+
+
