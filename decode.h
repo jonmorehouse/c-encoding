@@ -15,4 +15,4 @@ typedef struct {
 // declare a structure variable that can be accessed from exterior calling functions
 extern namespace_struct const decode;
 
-#endif // ENCODE_H
+#endif // DECODE_H

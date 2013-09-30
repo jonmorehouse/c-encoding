@@ -15,10 +15,14 @@ LDLIBS := $(shell pkg-config --libs $(FFMPEG_LIBS)) $(LDLIBS)
 decode.o: decode.c decode.h
 
 	gcc -c $(CFLAGS) $(LDFLAGS) decode.c
-	
-test: decode.o
 
-	gcc $(CFLAGS) $(LDLIBS) decode.o test.c -o test
+encode.o: encode.c encode.h
+
+	gcc -c $(CLFAGS) $(LDFLAGS) encode.c
+	
+test: decode.o encode.o
+
+	gcc $(CFLAGS) $(LDLIBS) decode.o encode.o test.c -o test
 
 clean: 
 	rm *.o

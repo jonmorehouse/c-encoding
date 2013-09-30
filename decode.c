@@ -1,9 +1,11 @@
 #include "decode.h"
 
-// include any erroneous libraries that are just temporary etc
-#include <stdio.h>
+// include project dependencies
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
+
+// include temp development dependencies
+#include <stdio.h>
 
 // initialize the function that we are creating
 // static global variable or function is seen only in the file its declared in
