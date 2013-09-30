@@ -99,4 +99,4 @@ static void fromPath(const char * filePath) {
 
 
 // initialize our constant decode struct for exporting etc
-namespace_struct const decode = {fromPath};
+decode_namespace const decode = {fromPath};

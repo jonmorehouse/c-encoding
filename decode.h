@@ -10,9 +10,9 @@ typedef struct {
 
 	void (* const fromPath)(const char *);
 
-} namespace_struct;
+} decode_namespace;
 
 // declare a structure variable that can be accessed from exterior calling functions
-extern namespace_struct const decode;
+extern  decode_namespace const decode;
 
 #endif // DECODE_H

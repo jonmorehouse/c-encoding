@@ -20,7 +20,7 @@ encode.o: encode.c encode.h
 
 	gcc -c $(CLFAGS) $(LDFLAGS) encode.c
 	
-test: decode.o encode.o
+test: decode.o encode.o test.c
 
 	gcc $(CFLAGS) $(LDLIBS) decode.o encode.o test.c -o test
 
