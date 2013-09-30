@@ -21,6 +21,12 @@ Sample Programs
 [Basic Tutorial](http://www.inb.uni-luebeck.de/~boehme/using_libavcodec.html)
 [Old Tutorial](http://dranger.com/ffmpeg/tutorial01.c)
 
+Transport Streams
+-
+
+-	[Overview](http://documentation.apple.com/en/compressor/usermanual/index.html#chapter=18%26section=3%26tasks=true)
+-	Application: transport streams -- contain several mpeg-2 content channels and associated audio. 
+
 
 
 

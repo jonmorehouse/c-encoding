@@ -3,7 +3,7 @@
 
 int main(int argc, char * argv[]) {
 
-	char * const filePath = "test";
+	char * const filePath = "fixtures/sample-clip.mov";
 	decode.fromPath(filePath);
 
 	return 0;
