@@ -26,5 +26,6 @@ test: decode.o encode.o test.c
 
 clean: 
 	rm *.o
+	rm ./test
 
 

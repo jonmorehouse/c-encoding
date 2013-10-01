@@ -97,6 +97,26 @@ static void fromPath(const char * filePath) {
 
 }
 
+// initialize getFormatContext element
+static AVFormatContext * getFormatContext(const char * inputPath) {
+	
+	// need to open the file 				
+	AVFormatContext * context = NULL;
+
+	// now lets open the information and handle the errors properly etc
+	if (avformat_open_input(&context, inputPath, NULL, NULL) < 0) {
+		
+		// handle errors elegantly here!
+
+	}
+
+	// now lets make sure that there are actually streams in this context
+	if (avformat_find_stream_info(context, NULL) < 0) {
+
+		// handle errors elegantly here
+		// there are no media streams attached to this element
+	}
+}
 
 // initialize our constant decode struct for exporting etc
-decode_namespace const decode = {fromPath};
+decode_namespace const decode = {fromPath, getFormatContext};

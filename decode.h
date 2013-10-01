@@ -8,6 +8,11 @@
 // declare a structure to export all of the functions that we are declaring in this namespace etc
 typedef struct {
 
+	// create an element to get the formatContext from the input filePath
+	AVFormatContext * (* const getFormatContext)(const char *);
+
+	// create a simple decode element
+	// in the future, this should take in callback function so that we can pass the individual frame into each one
 	void (* const fromPath)(const char *);
 
 } decode_namespace;

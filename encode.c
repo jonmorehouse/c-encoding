@@ -71,10 +71,6 @@ static void encodeVideo(const char * inputPath, const char * outputPath, Encodin
 	if (avcodec_open2(codecContext, codec, NULL) < 0) return;
 
 	// now open the file
-
-	
-	
-
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header
