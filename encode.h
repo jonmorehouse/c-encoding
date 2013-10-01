@@ -1,7 +1,10 @@
 #ifndef ENCODE_H
 #define ENCODE_H
 
-// now link up to the proper libraries needed etc
+// now include project files
+#include "decode.h"
+
+// now link up to the proper libraries needed 
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 
@@ -18,6 +21,9 @@ typedef struct {
 
 // now lets declare a namspace structure to export this module under
 typedef struct {
+
+	// create the input format context etc
+	AVFormatContext * (* const createFormatContext)(const char *);
 
 	// pass in an inputPath and an output path for the encoding of the video
 	// in the future we will pass in a type of codec as well

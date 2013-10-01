@@ -116,7 +116,30 @@ static AVFormatContext * getFormatContext(const char * inputPath) {
 		// handle errors elegantly here
 		// there are no media streams attached to this element
 	}
+
+	return context;
+}
+
+static int getVideoStreamIndex(const AVFormatContext * context) {
+	
+	// now we are going to loop through each of the various streams and return an index to the video stream
+	int index = -1;	
+	unsigned int i = 0;
+
+	// now loop through each of the streams and lets return the index!
+	for (i < 0; i < context->nb_streams; i++) {
+
+		// now do a long check to ensure that we are actually grabbing a valid video stream
+		if (context->streams[i] && context->streams[i]->codec && context->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
+
+			// reset the index to the correct value
+			index = i;
+			break;
+		}
+	}
+
+	return index;
 }
 
 // initialize our constant decode struct for exporting etc
-decode_namespace const decode = {fromPath, getFormatContext};
+decode_namespace const decode = {fromPath, getFormatContext, getVideoStreamIndex};

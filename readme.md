@@ -31,5 +31,3 @@ Notes
 -	[Encode/Decode Example](http://stackoverflow.com/questions/13565062/fps-porblem-when-saving-video-in-mp4-container)
 
 
-
-
