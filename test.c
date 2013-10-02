@@ -7,18 +7,29 @@
 
 #include <stdio.h>
 
-int main(int argc, char * argv[]) {
+void testEncodeCreateOutputContext() {
+
+	// initialize the outputPath
+	char * const outputPath = "fixtures/test.mov";
+	AVFormatContext * output = NULL;
+	
+	// now lets call the function properly
+	output = encode.createFormatContext(outputPath);
+}
+
+void testEncoding() {
 
 	char * const inputPath = "fixtures/sample-clip.mov";
 	char * const outputPath = "fixtures/output.ts";
 	EncodingJob encodingJob = { .codecId = 1, .bitrate = 200000, .height = 300, .width = 400, .fps = 25.00, .codecId = AV_CODEC_ID_MPEG1VIDEO};
-	// initialize an input context etc
-	AVFormatContext * inputContext = NULL;	
 
-	// now actually grab the context
-	inputContext = decode.getFormatContext(inputPath);
+	// call encoding function
+}
 
-	// now that we have the context figured out ... lets get the video stream index
+int main(int argc, char * argv[]) {
+
+	// run output context creation test
+	testEncodeCreateOutputContext();
 
 	return 0;
 }

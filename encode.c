@@ -13,15 +13,12 @@
  *  1.) Should parse the string and ensure that we are creating the correct output type
  *
  */
-static AVFormatContext * createOutputContext(const char * outputPath) {
+static AVFormatContext * createFormatContext(const char * outputPath) {
 
 	// initialize a null pointer to the output context
 	AVFormatContext * output = NULL;	
-	
-	// now lets get the output type based upon the input element
-	
 
-
+	return output;
 }
 
 
@@ -32,7 +29,6 @@ static AVFormatContext * createOutputContext(const char * outputPath) {
  * 3.) initialize the codec for output 
  * 4.) Loop through each frame and encode into the output file etc
  *
- *
  */
 static void encodeVideo(const char * inputPath, const char * outputPath, EncodingJob * encodingJob) {
 
@@ -40,10 +36,9 @@ static void encodeVideo(const char * inputPath, const char * outputPath, Encodin
 	AVFormatContext * inputContext = decode.getFormatContext(inputPath);
 	
 	// now lets initialize the avformatcontext for the output container
-	AVFormatContext * outputContext = createOutputContext(outputPath);
+	AVFormatContext * outputContext = createFormatContext(outputPath);
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header
-encode_namespace const encode = {encodeVideo};
-
+encode_namespace const encode = {encodeVideo, createFormatContext};
 
