@@ -142,4 +142,10 @@ static int getVideoStreamIndex(const AVFormatContext * context) {
 }
 
 // initialize our constant decode struct for exporting etc
-decode_namespace const decode = {fromPath, getFormatContext, getVideoStreamIndex};
+decode_namespace const decode = {.fromPath = fromPath, .getFormatContext = getFormatContext, .getVideoStreamIndex = getVideoStreamIndex};
+
+
+
+
+
+

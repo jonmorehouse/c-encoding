@@ -11,10 +11,12 @@ void testEncodeCreateOutputContext() {
 
 	// initialize the outputPath
 	char * const outputPath = "fixtures/test.mov";
-	AVFormatContext * output = NULL;
+	AVFormatContext * output;;
+
+	encode.createFormatContext(outputPath);	
 	
 	// now lets call the function properly
-	output = encode.createFormatContext(outputPath);
+	/*output = encode.createFormatContext(outputPath);*/
 }
 
 void testEncoding() {

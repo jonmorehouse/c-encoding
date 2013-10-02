@@ -22,10 +22,10 @@ encode.o: encode.c encode.h
 	
 test: decode.o encode.o test.c
 
-	gcc $(CFLAGS) $(LDLIBS) decode.o encode.o test.c -o test
+	gcc $(CFLAGS) $(LDLIBS) decode.o encode.o test.c -o test.out
 
 clean: 
 	rm *.o
-	rm ./test
+	rm ./test.out
 
 

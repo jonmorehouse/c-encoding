@@ -7,6 +7,7 @@
 // now include erroneous, temp libraries here
 #include <stdio.h>
 
+
 /*
  * Create a valid output context given a file name
  * 
@@ -16,8 +17,10 @@
 static AVFormatContext * createFormatContext(const char * outputPath) {
 
 	// initialize a null pointer to the output context
-	AVFormatContext * output = NULL;	
+	AVFormatContext * output = NULL;
+	
 
+	
 	return output;
 }
 
@@ -40,5 +43,5 @@ static void encodeVideo(const char * inputPath, const char * outputPath, Encodin
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header
-encode_namespace const encode = {encodeVideo, createFormatContext};
+encode_namespace const encode = {.encodeVideo = encodeVideo, .createFormatContext = createFormatContext};
 
