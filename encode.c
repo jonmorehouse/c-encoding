@@ -61,7 +61,7 @@ static void encodeVideo(const char * inputPath, const char * outputPath, Encodin
 	AVStream const * const inputStream = inputContext->streams[decode.getVideoStreamIndex(inputContext)];
 	
 	// now lets initialize the codec needed for this element
-	
+		
 			
 }
 
