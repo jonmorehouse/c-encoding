@@ -1,5 +1,6 @@
 #include "utilities.h"
 #include <stdio.h>
+#include <string.h>
 
 static const char * getFormatFromPath(const char * inputPath) {
 	
@@ -7,41 +8,21 @@ static const char * getFormatFromPath(const char * inputPath) {
 	const char * format;
 
 	// now initialize temp strings for use throughout function
-	char * token;
-	char * string;
-	char * tofree;
+	char * token,  * string, * tofree;
+	
+	// now initialize a few elements
+	tofree = string = strdup(inputPath);
 
-	// initialize the starting string 
-	/*string = strdup(inputPath);*/
-	string = strdup("abc,def,ghi");
+	// loop through each of the elements
+	while ((token = strsep(&string, ".")) != NULL) 
+		format = token;
 
-	// 
-	if (string != NULL) {
+	// now free the temporary memory
+	free(tofree);
 
-		// iniitalize element
-		tofree = string;
-
-		// loop through the string pieces
-		while ((token = strsep(string, ",")) != NULL) {
-
-			// cache the token 		
-			/*printf("%s\n", token);*/
-
-		}
-		
-		// 
-		free(tofree);
-
-	}//end of master if
-
-
-	format = "test";
 	return format;
 }
 
 // now lets export this function that we just created into the utilities namespace
 utilities_namespace const utilities = {.getFormatFromPath = getFormatFromPath};
-
-
-
 

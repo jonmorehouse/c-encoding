@@ -36,9 +36,10 @@ static AVFormatContext * createFormatContext(const char * outputPath) {
 			printf("%s", token);	
 
 		}
+
+		free(tofree);
 	}
 
-	free(tofree);
 		
 	
 	return output;
