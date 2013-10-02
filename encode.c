@@ -1,8 +1,14 @@
+#include "utilities.h"
 #include "encode.h"
 
 // now include any  libraries needed for application
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
+#include <libavutil/avutil.h>
+#include <libswscale/swscale.h>
+#include <libavutil/opt.h>
+#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
 
 // now include erroneous, temp libraries here
 #include <stdio.h>
@@ -18,29 +24,13 @@ static AVFormatContext * createFormatContext(const char * outputPath) {
 
 	// initialize a null pointer to the output context
 	AVFormatContext * output = NULL;
-	const char * format;
-	char * token,
-	     * string,
-	     * tofree;
+	const char * format = utilities.getFormatFromPath(outputPath);
 	
-	// initialize the string so that we can mutate it 
-	string = strdup(outputPath);
-	
-	// now lets go through and loop through the string, breaking each individual piece along the way
-	if (string != NULL) {
+	// now lets initialize the actual format element
+	if (avformat_alloc_output_context2(&output, NULL, format, outputPath) < 0) {
 
-		tofree = string;
-
-		while ((token = strsep(&string, ".")) != NULL) {
-
-			printf("%s", token);	
-
-		}
-
-		free(tofree);
+		// handle errors with elegance here!
 	}
-
-		
 	
 	return output;
 }
@@ -56,11 +46,21 @@ static AVFormatContext * createFormatContext(const char * outputPath) {
  */
 static void encodeVideo(const char * inputPath, const char * outputPath, EncodingJob * encodingJob) {
 
+	av_register_all();
+	
 	// this is going to open the input file and give us a handle to grab the streams etc that we want from it
 	AVFormatContext * inputContext = decode.getFormatContext(inputPath);
 	
 	// now lets initialize the avformatcontext for the output container
 	AVFormatContext * outputContext = createFormatContext(outputPath);
+
+	// now initialize the decoder
+	AVStream const * const inputStream = inputContext->streams[decode.getVideoStreamIndex(inputContext)];
+	
+	// now lets initialize the codec needed for this element
+	
+
+			
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header

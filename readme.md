@@ -11,9 +11,24 @@ Overview
 Installation
 -
 
+-	Mac Install [link](http://ffmpeg.org/trac/ffmpeg/wiki/MacOSXCompilationGuide)
+-	dependencies for special compilation to enable various different libraries etc
+
+		brew install automake celt faac fdk-aac git lame libass libtool libvorbis libvpx \
+		libvo-aacenc opencore-amr openjpeg opus sdl schroedinger shtool speex texi2html \
+		theora wget x264 xvid yasm libaacs
+
 -	ffmpeg 2.0.1 [source](http://www.ffmpeg.org/releases/ffmpeg-2.0.1.tar.bz2)
 -	`wget sourceUrl && tar jxf download`
--	`./configure --prefix=/usr/local && make && make install`
+-	configure ffmpeg to use all of the revelent libraries needed
+
+		./configure --enable-gpl --enable-version3 --enable-nonfree --enable-postproc --enable-libaacplus \
+		--enable-libass --enable-libcelt --enable-libfaac --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame \
+		--enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-openssl \
+		--enable-libopus --enable-libschroedinger --enable-libspeex --enable-libtheora --enable-libvo-aacenc \
+		--enable-libvorbis --enable-libvpx --enable-libx264 --enable-libxvid --prefix=/usr/local
+
+-	make && make install`
 
 Things to Consider
 -

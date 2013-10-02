@@ -5,7 +5,12 @@
 // now include any project dependencies
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
-
+#include "libavformat/avformat.h"
+#include "libavutil/avutil.h"
+#include <libswscale/swscale.h>
+#include <libavutil/opt.h>
+#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
 #include <stdio.h>
 
 void testGetFormatFromPath() {
@@ -23,15 +28,11 @@ void testGetFormatFromPath() {
 void testEncodeCreateOutputContext() {
 
 	// initialize the outputPath
-	char * const outputPath = "fixtures/test.mov";
-	AVFormatContext * output;;
+	char * const outputPath = "fixtures/test.avi";
+	AVFormatContext * output;
 
-	encode.createFormatContext(outputPath);	
-	
 	// now lets call the function properly
-	/*output = encode.createFormatContext(outputPath);*/
-	
-
+	output = encode.createFormatContext(outputPath);
 }
 
 void testEncoding() {
@@ -47,9 +48,19 @@ int main(int argc, char * argv[]) {
 
 	// run output context creation test
 	/*testEncodeCreateOutputContext();*/
+	AVOutputFormat * fmt;	
+	fmt = av_guess_format("h264", NULL, NULL);
+
+	if (!fmt) {
+
+		printf("TEST");
+	}
+	else 
+		printf("%s", fmt->name);
 
 	// just test the utilities for now
-	testGetFormatFromPath();
+	/*testGetFormatFromPath();*/
 
+	//
 	return 0;
 }
