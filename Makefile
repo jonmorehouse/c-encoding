@@ -24,6 +24,10 @@ encode.o: encode.c encode.h
 
 	gcc -c $(CLFAGS) $(LDFLAGS) encode.c
 	
+temp: temp.c
+
+	gcc $(CFLAGS) $(LDLIBS) temp.c -o test.out
+
 test: decode.o encode.o utilities.o test.c
 
 	gcc $(CFLAGS) $(LDLIBS) decode.o encode.o utilities.o test.c -o test.out

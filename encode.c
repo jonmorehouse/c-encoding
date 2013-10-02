@@ -22,6 +22,8 @@
  */
 static AVFormatContext * createFormatContext(const char * outputPath) {
 
+	av_register_all();
+
 	// initialize a null pointer to the output context
 	AVFormatContext * output = NULL;
 	const char * format = utilities.getFormatFromPath(outputPath);
@@ -32,6 +34,7 @@ static AVFormatContext * createFormatContext(const char * outputPath) {
 		// handle errors with elegance here!
 	}
 	
+	// return context that was created
 	return output;
 }
 
@@ -42,7 +45,7 @@ static AVFormatContext * createFormatContext(const char * outputPath) {
  * 2.) create a pointer to the video stream etc
  * 3.) initialize the codec for output 
  * 4.) Loop through each frame and encode into the output file etc
- *
+*
  */
 static void encodeVideo(const char * inputPath, const char * outputPath, EncodingJob * encodingJob) {
 
@@ -59,7 +62,6 @@ static void encodeVideo(const char * inputPath, const char * outputPath, Encodin
 	
 	// now lets initialize the codec needed for this element
 	
-
 			
 }
 

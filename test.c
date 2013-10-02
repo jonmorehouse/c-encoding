@@ -28,7 +28,7 @@ void testGetFormatFromPath() {
 void testEncodeCreateOutputContext() {
 
 	// initialize the outputPath
-	char * const outputPath = "fixtures/test.avi";
+	char * const outputPath = "fixtures/test.mp4";
 	AVFormatContext * output;
 
 	// now lets call the function properly
@@ -47,16 +47,7 @@ void testEncoding() {
 int main(int argc, char * argv[]) {
 
 	// run output context creation test
-	/*testEncodeCreateOutputContext();*/
-	AVOutputFormat * fmt;	
-	fmt = av_guess_format("h264", NULL, NULL);
-
-	if (!fmt) {
-
-		printf("TEST");
-	}
-	else 
-		printf("%s", fmt->name);
+	testEncodeCreateOutputContext();
 
 	// just test the utilities for now
 	/*testGetFormatFromPath();*/
@@ -64,3 +55,16 @@ int main(int argc, char * argv[]) {
 	//
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
