@@ -18,8 +18,28 @@ static AVFormatContext * createFormatContext(const char * outputPath) {
 
 	// initialize a null pointer to the output context
 	AVFormatContext * output = NULL;
+	const char * format;
+	char * token,
+	     * string,
+	     * tofree;
 	
+	// initialize the string so that we can mutate it 
+	string = strdup(outputPath);
+	
+	// now lets go through and loop through the string, breaking each individual piece along the way
+	if (string != NULL) {
 
+		tofree = string;
+
+		while ((token = strsep(&string, ".")) != NULL) {
+
+			printf("%s", token);	
+
+		}
+	}
+
+	free(tofree);
+		
 	
 	return output;
 }

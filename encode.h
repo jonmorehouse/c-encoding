@@ -27,7 +27,7 @@ typedef struct {
 
 	// pass in an inputPath and an output path for the encoding of the video
 	// in the future we will pass in a type of codec as well
-	void (* const encodeVideo)(const char *, const char *, EncodingJob *);
+	const char * (* const encodeVideo)(const char *, const char *, EncodingJob *);
 
 } encode_namespace;
 

@@ -1,11 +1,24 @@
 #include "decode.h"
 #include "encode.h"
+#include "utilities.h"
 
 // now include any project dependencies
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 
 #include <stdio.h>
+
+void testGetFormatFromPath() {
+
+	const char * inputPath = "test.mov";
+
+	const char * format;
+
+	// 
+	format = utilities.getFormatFromPath(inputPath);
+
+	printf("%s", format);
+}
 
 void testEncodeCreateOutputContext() {
 
@@ -17,6 +30,8 @@ void testEncodeCreateOutputContext() {
 	
 	// now lets call the function properly
 	/*output = encode.createFormatContext(outputPath);*/
+	
+
 }
 
 void testEncoding() {
@@ -31,7 +46,10 @@ void testEncoding() {
 int main(int argc, char * argv[]) {
 
 	// run output context creation test
-	testEncodeCreateOutputContext();
+	/*testEncodeCreateOutputContext();*/
+
+	// just test the utilities for now
+	testGetFormatFromPath();
 
 	return 0;
 }
