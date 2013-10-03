@@ -32,7 +32,7 @@ void testEncodeCreateOutputContext() {
 	AVFormatContext * output;
 
 	// now lets call the function properly
-	output = encode.createFormatContext(outputPath, "mpegts");
+	output = encode.createFormatContext(outputPath, "mpeg");
 }
 
 void testEncoding() {

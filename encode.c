@@ -84,7 +84,6 @@ static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, cons
 
 	// now lets  ctually open the codec
 	if (avcodec_open2(stream->codec, codec, NULL) < 0) ;//handle errors here
-
 	// end of function -- we have initialize stream and element etc
 }
 
@@ -208,23 +207,25 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 			// generate length of the element
 			len = avcodec_decode_video2(inStream->codec, decodedFrame, &gotFrame, &decodePacket);
-			
+
 			// now handle gracefully if we have no length here
-			if (len < 0) ;// do something
+			if (len < 0) printf("%i", "BAD");// do something
 
 			// now ensure that we have a frame to work with
 			if (gotFrame) {
 			
 				// initialize a packet for the encoded data to go to
+				// initialize with the default fields
 				av_init_packet(&encodedPacket);
 
 				// initialize data and size
+				// note that encode_video_2 will allocate the necessary memory needed to store this frame etc 
 				encodedPacket.data = NULL;
 				encodedPacket.size = 0;
 
 				// now encode the video packet
 				if (avcodec_encode_video2(outStream->codec, &encodedPacket, decodedFrame, &gotFrame) < 0)
-					printf("%s", "one");// handle error eleegantly here
+					printf("%s", "one");// handle error elegantly here
 
 				if (gotFrame) {
 
@@ -233,36 +234,45 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 					encodedPacket.stream_index = outStream->index;
 					
+					// set pts of packet
+					if (encodedPacket.pts != AV_NOPTS_VALUE)
+						encodedPacket.pts = av_rescale_q(encodedPacket.pts, outStream->codec->time_base, outStream->time_base);
+						
+					// set dts of packet
+					if (encodedPacket.dts != AV_NOPTS_VALUE)
+						encodedPacket.dts = av_rescale_q(encodedPacket.dts, outStream->codec->time_base, outStream->time_base);
+
+					// now write the packet to the output stream
 					if (av_interleaved_write_frame(outputContext, &encodedPacket) < 0)
-						printf("%s", "two");// handle error eleegantly here
 						/*;// handle errors elegantly*/
 
+					// free the packet
 					av_free_packet(&encodedPacket);
 				}
-			}
+			}// end large if loop
 
-			//now clear the decoded packet
-			av_free_packet(&decodePacket);
-		}
+		}// end of big if statement
 		
-		// now write the ending to the file
-		av_write_trailer(outputContext);
+		//now clear the decoded packet
+		av_free_packet(&decodePacket);
 
-		// now close the context
-		avio_close(outputContext->pb);
+	}// end while loop
 
-		return;
-		// now free the final frames
-		avcodec_free_frame(&encodeFrame);
-		avcodec_free_frame(&decodedFrame);
-	
-		// now free the context
-		avformat_free_context(outputContext);
+	// now write the ending to the file
+	av_write_trailer(outputContext);
 
-		// and finally close the input file
-		av_close_input_file(inputContext);
-	}
+	// now close the context
+	avio_close(outputContext->pb);
 
+	// now free the final frames
+	avcodec_free_frame(&encodeFrame);
+	avcodec_free_frame(&decodedFrame);
+
+	// now free the context
+	avformat_free_context(outputContext);
+
+	// and finally close the input file
+	av_close_input_file(inputContext);
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header
