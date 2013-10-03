@@ -19,14 +19,21 @@
  */
 static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, const AVFormatContext * context, const EncodingJob * job) {
 
-	AVCodec * codec = *inputCodec;
-	AVStream * stream = *inputStream;
+	// initialize temp helper variables here 
+	AVCodec * codec = NULL; 
+	AVStream * stream = NULL;	
 
 	// now initialize the codec and stream elements as needed
-	codec = avcodec_find_encoder(AV_CODEC_ID_H264);	
+	*inputCodec = avcodec_find_encoder(AV_CODEC_ID_H264);	
+
+	// cache the input codec element
+	codec = *inputCodec;
 
 	// now initialize element	
-	stream = avformat_new_stream(context, codec);
+	*inputStream = avformat_new_stream(context, codec);
+	
+	// chace the newly created stream for ease of use
+	stream = *inputStream;
 
 	// now handle errors as needed 
 	if (!codec) ;// handle bad codec errors
@@ -80,6 +87,8 @@ static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, cons
 
 	// end of function -- we have initialize stream and element etc
 }
+
+
 /*
  * Create a valid output context given a file name
  * 
@@ -121,7 +130,6 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	
 	/* 
 	 *	Initialize decoder methods and objects on the heap
-	 *
 	 */
 	// this is going to open the input file and give us a handle to grab the streams etc that we want from it
 	AVFormatContext * inputContext = decode.getFormatContext(encodingJob->inputPath);
@@ -159,8 +167,101 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	// open the stream needed
 	if(avio_open(&outputContext->pb, encodingJob->outputPath, AVIO_FLAG_WRITE) < 0) ;//handle error elegantly here
 
-	// now lets start to actually decode the stream and re-encode it into the next step
+	/*
+	 * Now actually encode the video
+	 * Initialize input/output frames and begin working on application
+	 * Initailize temp variables here
+	*/
+	// initialize frame to hold decoded raw input
+	AVFrame *decodedFrame = avcodec_alloc_frame();
+
+	// now initialize memory to handle encoded frame of video
+	AVFrame * encodeFrame = avcodec_alloc_frame();
+
+	// now ensure that we created the temp frames properly
+	if (!decodedFrame || !encodeFrame) ;// handle error here
+
+	// now initialize the frame settings etc for thisapplication
+	// set the format for the frame
+	encodeFrame->format = outStream->codec->pix_fmt;
+	encodeFrame->width = outStream->codec->width;
+	encodeFrame->height = outStream->codec->height;
+
+	// now initialize an av image frame
+	if (av_image_alloc(encodeFrame->data, encodeFrame->linesize, outStream->codec->width, outStream->codec->height, outStream->codec->pix_fmt, 1) < 0)
+		// handle error here
+	
+	// now dump the format
+	av_dump_format(inputContext, 0, encodingJob->inputPath, 0);
+	
+	// write header to output container
+	avformat_write_header(outputContext, NULL);
+
+	// now initialize a few packets
+	AVPacket decodePacket, encodedPacket;
+	int gotFrame, len;
+
+	// now read packets from the input context into the packet for as long as possible
+	while(av_read_frame(inputContext, &decodePacket) >=0) {
+
+		if (decodePacket.stream_index == videoStreamIndex) {
+
+			// generate length of the element
+			len = avcodec_decode_video2(inStream->codec, decodedFrame, &gotFrame, &decodePacket);
+			
+			// now handle gracefully if we have no length here
+			if (len < 0) ;// do something
+
+			// now ensure that we have a frame to work with
+			if (gotFrame) {
+			
+				// initialize a packet for the encoded data to go to
+				av_init_packet(&encodedPacket);
+
+				// initialize data and size
+				encodedPacket.data = NULL;
+				encodedPacket.size = 0;
+
+				// now encode the video packet
+				if (avcodec_encode_video2(outStream->codec, &encodedPacket, decodedFrame, &gotFrame) < 0)
+					printf("%s", "one");// handle error eleegantly here
+
+				if (gotFrame) {
+
+					if (outStream->codec->coded_frame->key_frame)
+						encodedPacket.flags |= AV_PKT_FLAG_KEY;
+
+					encodedPacket.stream_index = outStream->index;
+					
+					if (av_interleaved_write_frame(outputContext, &encodedPacket) < 0)
+						printf("%s", "two");// handle error eleegantly here
+						/*;// handle errors elegantly*/
+
+					av_free_packet(&encodedPacket);
+				}
+			}
+
+			//now clear the decoded packet
+			av_free_packet(&decodePacket);
+		}
 		
+		// now write the ending to the file
+		av_write_trailer(outputContext);
+
+		// now close the context
+		avio_close(outputContext->pb);
+
+		return;
+		// now free the final frames
+		avcodec_free_frame(&encodeFrame);
+		avcodec_free_frame(&decodedFrame);
+	
+		// now free the context
+		avformat_free_context(outputContext);
+
+		// and finally close the input file
+		av_close_input_file(inputContext);
+	}
 
 }
 
