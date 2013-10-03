@@ -10,6 +10,8 @@ typedef struct {
 
 	// create an element to get the formatContext from the input filePath
 	AVFormatContext * (* const getFormatContext)(const char *);
+
+	// get the index for the stream index etc
 	int (* const getVideoStreamIndex)(const AVFormatContext *);
 
 	// create a simple decode element

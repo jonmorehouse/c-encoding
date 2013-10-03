@@ -8,7 +8,9 @@ FFMPEG_LIBS = libavdevice   \
 	      libavutil     \
 		
 # initialize cflags and libraries 
-CFLAGS += -Wall -g
+#CFLAGS += -Wall -g -Wno-unused -pedantic
+# enable gstabs to prevent the dsym folder output etc
+CFLAGS += -g -gstabs
 CFLAGS := $(shell pkg-config --cflags $(FFMPEG_LIBS)) $(CFLAGS)
 LDLIBS := $(shell pkg-config --libs $(FFMPEG_LIBS)) $(LDLIBS)
 

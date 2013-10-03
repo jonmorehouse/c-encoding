@@ -39,7 +39,6 @@ static void fromPath(const char * filePath) {
 	// register all codecs available on the system
 	av_register_all();
 
-
 	// now lets open the file using av_open_input
 	// pass in the format context pointer from above 
 	// avformat_open_input(formatContext, filePath, bufferSize, formatOptions)
@@ -93,8 +92,6 @@ static void fromPath(const char * filePath) {
 	uint8_t * buffer = (uint8_t *)av_malloc(numBytes * sizeof(uint8_t));
 
 	// allocate the correct number of bytes etc
-
-
 }
 
 // initialize getFormatContext element
@@ -120,6 +117,8 @@ static AVFormatContext * getFormatContext(const char * inputPath) {
 	return context;
 }
 
+
+//  
 static int getVideoStreamIndex(const AVFormatContext * context) {
 	
 	// now we are going to loop through each of the various streams and return an index to the video stream
@@ -141,11 +140,8 @@ static int getVideoStreamIndex(const AVFormatContext * context) {
 	return index;
 }
 
+
+
 // initialize our constant decode struct for exporting etc
-decode_namespace const decode = {.fromPath = fromPath, .getFormatContext = getFormatContext, .getVideoStreamIndex = getVideoStreamIndex};
-
-
-
-
-
+decode_namespace const decode = {.fromPath = fromPath, .getFormatContext = getFormatContext, .getVideoStreamIndex = getVideoStreamIndex, };
 

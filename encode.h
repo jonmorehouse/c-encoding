@@ -16,6 +16,9 @@ typedef struct {
 	int height;
 	int width;
 	float fps;
+	char * inputPath;
+	char * outputPath;
+	char * outputFormat;
 
 } EncodingJob;
 
@@ -23,11 +26,11 @@ typedef struct {
 typedef struct {
 
 	// create the input format context etc
-	AVFormatContext * (* const createFormatContext)(const char *);
+	AVFormatContext * (* const createFormatContext)(const char *, const char *);
 
 	// pass in an inputPath and an output path for the encoding of the video
 	// in the future we will pass in a type of codec as well
-	const char * (* const encodeVideo)(const char *, const char *, EncodingJob *);
+	const char * (* const encodeVideo)(EncodingJob *);
 
 } encode_namespace;
 

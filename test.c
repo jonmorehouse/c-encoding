@@ -32,26 +32,29 @@ void testEncodeCreateOutputContext() {
 	AVFormatContext * output;
 
 	// now lets call the function properly
-	output = encode.createFormatContext(outputPath);
+	output = encode.createFormatContext(outputPath, "mpegts");
 }
 
 void testEncoding() {
 
 	char * const inputPath = "fixtures/sample-clip.mov";
 	char * const outputPath = "fixtures/output.ts";
-	EncodingJob encodingJob = { .codecId = 1, .bitrate = 200000, .height = 300, .width = 400, .fps = 25.00, .codecId = AV_CODEC_ID_MPEG1VIDEO};
+	char * const format = "mpegts";
 
-	// call encoding function
+	EncodingJob encodingJob = { .codecId = 1, .bitrate = 200000, .height = 300, .width = 400, .fps = 25.00, .codecId = AV_CODEC_ID_MPEG1VIDEO, .inputPath = inputPath, .outputPath = outputPath, .outputFormat = format};
+
+	encode.encodeVideo(&encodingJob);
 }
 
 int main(int argc, char * argv[]) {
 
 	// run output context creation test
-	testEncodeCreateOutputContext();
+	/*testEncodeCreateOutputContext();*/
 
 	// just test the utilities for now
 	/*testGetFormatFromPath();*/
 
+	testEncoding();
 	//
 	return 0;
 }
