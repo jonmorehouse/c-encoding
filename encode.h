@@ -28,6 +28,9 @@ typedef struct {
 	// create the input format context etc
 	AVFormatContext * (* const createFormatContext)(const char *, const char *);
 
+	// initialize the codec for encoding output
+	void (* const initializeCodec)(AVCodec **, AVStream **, const AVFormatContext *, const EncodingJob *);	
+
 	// pass in an inputPath and an output path for the encoding of the video
 	// in the future we will pass in a type of codec as well
 	const char * (* const encodeVideo)(EncodingJob *);
