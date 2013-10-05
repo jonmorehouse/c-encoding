@@ -1,3 +1,4 @@
+# http://www.gnu.org/software/make/manual/make.html#Phony-Targets
 # declare dependencies etc
 FFMPEG_LIBS = libavdevice   \
 	      libavformat   \
@@ -14,28 +15,36 @@ CFLAGS += -g -gstabs
 CFLAGS := $(shell pkg-config --cflags $(FFMPEG_LIBS)) $(CFLAGS)
 LDLIBS := $(shell pkg-config --libs $(FFMPEG_LIBS)) $(LDLIBS)
 
-utilities.o: utilities.c utilities.h
+# initialize project structure
+SRCDIR=src
+OBJDIR=obj
+INCDIR=include
 
-	gcc -c $(CFLAGS) $(LDFLAGS) utilities.c
+# initialize project files
+#SOURCES=$($(SRCDIR)/*.c:$(SRCDIR)/=%.o)
+# http://www.gnu.org/software/make/manual/make.html#File-Name-Functions
 
-decode.o: decode.c decode.h
+# grab all of the raw names from the srcs directory
+# http://www.gnu.org/software/make/manual/html_node/Wildcard-Function.html
+SOURCES=$(notdir $(wildcard $(SRCDIR)/**.c))
 
-	gcc -c $(CFLAGS) $(LDFLAGS) decode.c
+# initialize all of our objects
+OBJECTS:=$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
-encode.o: encode.c encode.h
+all: 
+	@echo $(OBJECTS)
 
-	gcc -c $(CLFAGS) $(LDFLAGS) encode.c
+test.out: $(OBJECTS)
 	
-temp: temp.c
+	@$(CC) $(CFLAGS) $(LDLIBS) $(OBJECTS) test.c -o test.out
 
-	gcc $(CFLAGS) $(LDLIBS) temp.c -o test.out
+.c.o:
+	@$(CC) -c $(CFLAGS) $< -o $@
 
-test: decode.o encode.o utilities.o test.c
+clean:
+	rm -rf *.o
+	rm test.out
 
-	gcc $(CFLAGS) $(LDLIBS) decode.o encode.o utilities.o test.c -o test.out
-
-clean: 
-	rm *.o
-	rm ./test.out
+.PHONY: clean
 
 
