@@ -56,10 +56,15 @@ static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, cons
 	stream->codec->codec_id = codec->id;
 	stream->codec->bit_rate = job->bitrate;
 
+	
+	// initialize fps elements
 	stream->codec->time_base.den = 25;
 	stream->codec->time_base.num = 1;
 	stream->codec->keyint_min = 25;
-	stream->codec->max_b_frames = 3;
+	stream->codec->max_b_frames = 1;
+	stream->codec->gop_size = 10;
+
+	/*
 	stream->codec->b_frame_strategy = 1;
 	stream->codec->scenechange_threshold = 40;
 	stream->codec->refs = 6;
@@ -68,6 +73,7 @@ static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, cons
 	stream->codec->qcompress = 0.6;
 	stream->codec->max_qdiff = 4;
 	stream->codec->i_quant_factor = 1.4;
+	*/
 
 	stream->codec->refs = 1;
 	stream->codec->chromaoffset = -2;
@@ -277,4 +283,4 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 // now implement the namespace struct that was initialized as an external variable in previous header
 encode_namespace const encode = {.encodeVideo = encodeVideo, .createFormatContext = createFormatContext};
-
+s

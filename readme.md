@@ -45,6 +45,7 @@ Notes
 
 -	[Encode/Decode Example](http://stackoverflow.com/questions/13565062/fps-porblem-when-saving-video-in-mp4-container)
 -	[FFMPEG Example](http://ffmpeg.org/doxygen/trunk/doc_2examples_2decoding_encoding_8c-example.html)
+-	[Basic H264 Intro / ExtraData](http://aviadr1.blogspot.com.au/2010/05/h264-extradata-partially-explained-for.html)
 
 
 
