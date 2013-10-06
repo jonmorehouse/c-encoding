@@ -55,7 +55,7 @@ static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, cons
 	stream->codec->height = job->height;
 	stream->codec->codec_id = codec->id;
 	stream->codec->bit_rate = job->bitrate;
-	
+
 	stream->codec->time_base.den = 25;
 	stream->codec->time_base.num = 1;
 	stream->codec->keyint_min = 25;
@@ -123,9 +123,8 @@ static AVFormatContext * createFormatContext(const char * outputPath, const char
  */
 static void encodeVideo(EncodingJob * encodingJob) {
 
+	// register all codecs for this application
 	av_register_all();
-	
-	
 	
 	/* 
 	 *	Initialize decoder methods and objects on the heap
@@ -218,8 +217,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 				// initialize with the default fields
 				av_init_packet(&encodedPacket);
 
-				// initialize data and size
-				// note that encode_video_2 will allocate the necessary memory needed to store this frame etc 
+				// we want the encoder to resize / allocate memory etc
 				encodedPacket.data = NULL;
 				encodedPacket.size = 0;
 
@@ -227,6 +225,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 				if (avcodec_encode_video2(outStream->codec, &encodedPacket, decodedFrame, &gotFrame) < 0)
 					printf("%s", "one");// handle error elegantly here
 
+				// check if we have a frame etc
 				if (gotFrame) {
 
 					if (outStream->codec->coded_frame->key_frame)
@@ -238,6 +237,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 					if (encodedPacket.pts != AV_NOPTS_VALUE)
 						encodedPacket.pts = av_rescale_q(encodedPacket.pts, outStream->codec->time_base, outStream->time_base);
 						
+					/*printf("%i\n", encodedPacket.pts);*/
 					// set dts of packet
 					if (encodedPacket.dts != AV_NOPTS_VALUE)
 						encodedPacket.dts = av_rescale_q(encodedPacket.dts, outStream->codec->time_base, outStream->time_base);

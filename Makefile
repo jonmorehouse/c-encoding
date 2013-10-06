@@ -1,4 +1,5 @@
 # initialize project structure
+DIR:=$(CURDIR)
 SRCDIR=src
 OBJDIR=obj
 INCDIR=include
@@ -23,7 +24,6 @@ LDLIBS := $(shell pkg-config --libs $(FFMPEG_LIBS)) $(LDLIBS)
 
 # initialize project files
 # http://www.gnu.org/software/make/manual/make.html#File-Name-Functions
-
 # grab all of the raw names from the srcs directory
 # http://www.gnu.org/software/make/manual/html_node/Wildcard-Function.html
 SOURCES=$(notdir $(wildcard $(SRCDIR)/**.c))
@@ -34,8 +34,11 @@ SOURCES:=$(filter-out $(EXECUTABLES), $(SOURCES))
 # initialize all of our objects
 OBJECTS:=$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
+temp:
+	@echo $(DIR)
+
 # output file
-test.out: $(OBJECTS) $(SRCDIR)/test.c
+test: $(OBJECTS) $(SRCDIR)/test.c
 
 	@$(CC) $(CFLAGS) $(LDLIBS) $(OBJECTS) $(SRCDIR)/test.c -o test.out
 
