@@ -42,12 +42,15 @@ Things to Consider
 
 -	Encoding Job - lets attach methods to initialize the encoding job from the inputPath etc
 
-Notes
+High Level Logic
 -
 
--	[Encode/Decode Example](http://stackoverflow.com/questions/13565062/fps-porblem-when-saving-video-in-mp4-container)
--	[FFMPEG Example](http://ffmpeg.org/doxygen/trunk/doc_2examples_2decoding_encoding_8c-example.html)
--	[Basic H264 Intro / ExtraData](http://aviadr1.blogspot.com.au/2010/05/h264-extradata-partially-explained-for.html)
+1.) Open video and get into a format context for input
+2.) Open output video and create formats, codecs etc -- output context
+3.) Add streams for output for both audio and video
+4.) Read packets from streams of input. Each packet has a frame attached. Write the frame to the stream for output etc
+
+
 
 
 

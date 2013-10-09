@@ -11,13 +11,17 @@ static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
 /*
  * Output encoded video to the output context
  *
- *
+ * 1.) We need to apply annexb bitstream filter 
+ * 2.) Will expect that we are passing in a stream that needs to be written to as well
  *
  *
  */
 static void writeVideoFrame(AVPacket * packet, AVFormatContext * outputContext) {
-	
-	// output video here		
+
+	// initialize the output bitstream filter context here
+	AVBitStreamFilterContext *bitstreamFilterContext = NULL; //outputStream->bitstream_filters;
+
+	// output 		
 	av_interleaved_write_frame(outputContext, packet);
 		
 

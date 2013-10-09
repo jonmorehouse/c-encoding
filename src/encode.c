@@ -108,8 +108,6 @@ static AVFormatContext * createFormatContext(const char * outputPath, const char
 	return output;
 }
 
-
-
 /* Steps: 
  * 
  * 1.) get a format context for input file
@@ -123,87 +121,22 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	// register all codecs for this application
 	av_register_all();
 	
-	/* 
-	 *	Initialize decoder methods and objects on the heap
-	 */
 	// this is going to open the input file and give us a handle to grab the streams etc that we want from it
+	// you don't need a decoder -- the whole point of the format context is that it does all of this for you. Allowing you to read packets which give you pieces of the stream!
 	AVFormatContext * inputContext = decode.getFormatContext(encodingJob->inputPath);
 
-	// cache the index of hte video stream for the input element
-	int videoStreamIndex = decode.getVideoStreamIndex(inputContext);
+	// initialize a packet for registering element
+	AVPacket decodedPacket;
 
-	// create elements needed for decoding stream 			
-	AVStream const *const inStream = inputContext->streams[videoStreamIndex];	
-
-	// initialize decoder codec
-	AVCodec * const decoder = avcodec_find_decoder(inStream->codec->codec_id);
-
-	// now ensure that our decoder is valid
-	if (!decoder) ;//handle error nicely
-
-	// now make sure we can easily open the codec		
-	if (avcodec_open2(inStream->codec, decoder, NULL) < 0) ;//handle error
-
-	/*
-	 * Now initialize encoder for output of the video 
-	 *
-	 */
 	// now lets initialize the avformatcontext for the output container
 	AVFormatContext * outputContext = createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
 
-	// change this in the future so that we can switch up the elements for encoding
-	AVCodec * encoderCodec = NULL;// avcodec_find_encoder(3333);
-	AVStream * outStream = NULL;
+	// now read the entire input file in a while loop!
+	while(av_read_frame(inputContext, &decodedPacket) >= 0) {
 	
-	// pass the encoder and outputStream into the element
-	initializeCodec(&encoderCodec, &outStream, outputContext, encodingJob);
+		// handle the encoding elements etc
 
-	// our codec is now properly initialized and opened
-	// open the stream needed
-	if(avio_open(&outputContext->pb, encodingJob->outputPath, AVIO_FLAG_WRITE) < 0) ;//handle error elegantly here
-
-	/*
-	 * Now actually encode the video
-	 * Initialize input/output frames and begin working on application
-	 * Initailize temp variables here
-	*/
-	// initialize frame to hold decoded raw input
-	AVFrame *decodedFrame = avcodec_alloc_frame();
-
-	// now initialize memory to handle encoded frame of video
-	AVFrame * encodeFrame = avcodec_alloc_frame();
-
-	// now ensure that we created the temp frames properly
-	if (!decodedFrame || !encodeFrame) ;// handle error here
-
-	// now initialize the frame settings etc for thisapplication
-	// set the format for the frame
-	encodeFrame->format = outStream->codec->pix_fmt;
-	encodeFrame->width = outStream->codec->width;
-	encodeFrame->height = outStream->codec->height;
-
-	// now initialize an av image frame
-	if (av_image_alloc(encodeFrame->data, encodeFrame->linesize, outStream->codec->width, outStream->codec->height, outStream->codec->pix_fmt, 1) < 0)
-		// handle error here
-	
-	// now dump the format
-	av_dump_format(inputContext, 0, encodingJob->inputPath, 0);
-
-	outputContext->max_delay = 700;
-	
-	// write header to output container
-	avformat_write_header(outputContext, NULL);
-
-	// now initialize a few packets
-	AVPacket decodePacket, encodedPacket;
-	int gotFrame, len;
-
-	// now read packets from the input context into the packet for as long as possible
-	while(av_read_frame(inputContext, &decodePacket) >=0) {
-
-		output.packetHandler(&decodePacket, outputContext);
-
-	}// end while loop
+	}
 
 	// now write the ending to the file
 	av_write_trailer(outputContext);
@@ -212,7 +145,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	avio_close(outputContext->pb);
 
 	// now free the final frames
-	/*avcodec_free_frame(&encodeFrame);*/
+	//avcodec_free_frame(&encodeFrame);
 	avcodec_free_frame(&decodedFrame);
 
 	// now free the context
