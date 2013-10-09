@@ -2,6 +2,36 @@
 
 #include <stdio.h>
 
+/*
+ * Create a valid output context given a file name
+ * 
+ *  1.) Should parse the string and ensure that we are creating the correct output type
+ *
+ */
+static AVFormatContext * createFormatContext(const char * outputPath, const char * format) {
+
+	// 
+	av_register_all();
+
+	// initialize a null pointer to the output context
+	AVFormatContext * output = NULL;
+	
+	// now lets initialize the actual format element
+	if (avformat_alloc_output_context2(&output, NULL, format, outputPath) < 0) {
+
+		// handle errors with elegance here!
+	}
+	
+	// return context that was created
+	return output;
+}
+
+
+/*
+ * Write audio data to the current element
+ *
+ *
+ */
 static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
 	
 	
@@ -23,9 +53,9 @@ static void writeVideoFrame(AVPacket * packet, AVFormatContext * outputContext) 
 
 	// output 		
 	av_interleaved_write_frame(outputContext, packet);
-		
 
 }
+
 
 /*
  * Packet handler is responsible for taking in an output context and then a packet and then doing magical shit!!
@@ -54,4 +84,14 @@ static void packetHandler(AVPacket * packet, AVFormatContext * outputContext) {
 
 }
 
-output_namespace const output = {.packetHandler = packetHandler, .writeAudioFrame = writeAudioFrame, .writeVideoFrame = writeVideoFrame};
+output_namespace const output = {
+
+	// create output format context
+	.createFormatContext = createFormatContext,
+	
+	// create a packet handler
+	.packetHandler = packetHandler, 
+	.writeAudioFrame = writeAudioFrame, 
+	.writeVideoFrame = writeVideoFrame
+
+};

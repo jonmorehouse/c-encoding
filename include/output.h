@@ -13,15 +13,18 @@
 // declare a structure type that is responsible for holding all the elements needed
 typedef struct {
 
+	// creating output elements
+	AVFormatContext * (* const createFormatContext)(const char *, const char *);
+
+	// writing to output elements
 	void (* const writeVideoFrame)(AVPacket *, AVFormatContext *);
 	void (* const  writeAudioFrame)(AVPacket *, AVFormatContext *);
 	void (* const packetHandler)(AVPacket *, AVFormatContext *);
 
 } output_namespace;
 
-//
+// 
 extern output_namespace const output;
-
 
 #endif //output_h
 

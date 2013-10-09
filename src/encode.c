@@ -7,6 +7,7 @@
 /*
  * Initialize the output codec and stream accordingly
  * Open the codec for use, but don't open the stream
+ *
  */
 static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, const AVFormatContext * context, const EncodingJob * job) {
 
@@ -85,28 +86,6 @@ static void initializeCodec(AVCodec ** inputCodec, AVStream ** inputStream, cons
 }
 
 
-/*
- * Create a valid output context given a file name
- * 
- *  1.) Should parse the string and ensure that we are creating the correct output type
- *
- */
-static AVFormatContext * createFormatContext(const char * outputPath, const char * format) {
-
-	av_register_all();
-
-	// initialize a null pointer to the output context
-	AVFormatContext * output = NULL;
-	
-	// now lets initialize the actual format element
-	if (avformat_alloc_output_context2(&output, NULL, format, outputPath) < 0) {
-
-		// handle errors with elegance here!
-	}
-	
-	// return context that was created
-	return output;
-}
 
 /* Steps: 
  * 
@@ -129,7 +108,8 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	AVPacket decodedPacket;
 
 	// now lets initialize the avformatcontext for the output container
-	AVFormatContext * outputContext = createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
+	AVFormatContext * outputContext = output.createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
+
 
 	// now read the entire input file in a while loop!
 	while(av_read_frame(inputContext, &decodedPacket) >= 0) {
@@ -146,15 +126,19 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 	// now free the final frames
 	//avcodec_free_frame(&encodeFrame);
-	avcodec_free_frame(&decodedFrame);
+	/*avcodec_free_frame(&decodedFrame);*/
 
 	// now free the context
-	avformat_free_context(outputContext);
+	/*avformat_free_context(outputContext);*/
 
 	// and finally close the input file
-	av_close_input_file(inputContext);
+	/*av_close_input_file(inputContext);*/
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header
-encode_namespace const encode = {.encodeVideo = encodeVideo, .createFormatContext = createFormatContext};
+encode_namespace const encode = {
+
+	.encodeVideo = encodeVideo, 
+	
+};
 
