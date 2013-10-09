@@ -1,15 +1,6 @@
 #include "utilities.h"
 #include "encode.h"
 
-// now include any  libraries needed for application
-#include <libavformat/avformat.h>
-#include <libavcodec/avcodec.h>
-#include <libavutil/avutil.h>
-#include <libswscale/swscale.h>
-#include <libavutil/opt.h>
-#include <libswscale/swscale.h>
-#include <libavutil/imgutils.h>
-
 // now include erroneous, temp libraries here
 #include <stdio.h>
 
@@ -208,59 +199,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	// now read packets from the input context into the packet for as long as possible
 	while(av_read_frame(inputContext, &decodePacket) >=0) {
 
-		if (decodePacket.stream_index == videoStreamIndex) {
-
-			// generate length of the element
-			len = avcodec_decode_video2(inStream->codec, decodedFrame, &gotFrame, &decodePacket);
-
-			// now handle gracefully if we have no length here
-			if (len < 0) printf("%i", "BAD");// do something
-
-			// now ensure that we have a frame to work with
-			if (gotFrame) {
-			
-				// initialize a packet for the encoded data to go to
-				// initialize with the default fields
-				av_init_packet(&encodedPacket);
-
-				// we want the encoder to resize / allocate memory etc
-				encodedPacket.data = NULL;
-				encodedPacket.size = 0;
-
-				// now encode the video packet
-				if (avcodec_encode_video2(outStream->codec, &encodedPacket, decodedFrame, &gotFrame) < 0)
-					printf("%s", "one");// handle error elegantly here
-
-				// check if we have a frame etc
-				if (gotFrame) {
-
-					if (outStream->codec->coded_frame->key_frame)
-						encodedPacket.flags |= AV_PKT_FLAG_KEY;
-
-					encodedPacket.stream_index = outStream->index;
-					
-					// set pts of packet
-					if (encodedPacket.pts != AV_NOPTS_VALUE)
-						encodedPacket.pts = av_rescale_q(encodedPacket.pts, outStream->codec->time_base, outStream->time_base);
-						
-					/*printf("%i\n", encodedPacket.pts);*/
-					// set dts of packet
-					if (encodedPacket.dts != AV_NOPTS_VALUE)
-						encodedPacket.dts = av_rescale_q(encodedPacket.dts, outStream->codec->time_base, outStream->time_base);
-
-					// now write the packet to the output stream
-					if (av_interleaved_write_frame(outputContext, &encodedPacket) < 0)
-						/*;// handle errors elegantly*/
-
-					// free the packet
-					av_free_packet(&encodedPacket);
-				}
-			}// end large if loop
-
-		}// end of big if statement
-		
-		//now clear the decoded packet
-		av_free_packet(&decodePacket);
+		output.packetHandler(&decodePacket, outputContext);
 
 	}// end while loop
 
@@ -271,7 +210,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	avio_close(outputContext->pb);
 
 	// now free the final frames
-	avcodec_free_frame(&encodeFrame);
+	/*avcodec_free_frame(&encodeFrame);*/
 	avcodec_free_frame(&decodedFrame);
 
 	// now free the context
@@ -283,4 +222,4 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 // now implement the namespace struct that was initialized as an external variable in previous header
 encode_namespace const encode = {.encodeVideo = encodeVideo, .createFormatContext = createFormatContext};
-s
+

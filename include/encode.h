@@ -2,11 +2,17 @@
 #define ENCODE_H
 
 // now include project files
+#include "output.h"
 #include "decode.h"
 
 // now link up to the proper libraries needed 
-#include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
+#include <libavutil/avutil.h>
+#include <libswscale/swscale.h>
+#include <libavutil/opt.h>
+#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
 
 // now initialize an encoding job structure
 typedef struct {

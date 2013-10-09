@@ -34,9 +34,6 @@ SOURCES:=$(filter-out $(EXECUTABLES), $(SOURCES))
 # initialize all of our objects
 OBJECTS:=$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
-temp:
-	@echo $(DIR)
-
 # output file
 test: $(OBJECTS) $(SRCDIR)/test.c
 
