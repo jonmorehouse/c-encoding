@@ -107,10 +107,10 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	// initialize a packet for registering element
 	AVPacket decodedPacket;
 
-	// now lets initialize the avformatcontext for the output container
-	AVFormatContext * outputContext = output.createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
+	// initialize the output element
+	/*Output * output = output.initOutput(encodingJob);*/
 
-
+/*
 	// now read the entire input file in a while loop!
 	while(av_read_frame(inputContext, &decodedPacket) >= 0) {
 	
@@ -126,13 +126,15 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 	// now free the final frames
 	//avcodec_free_frame(&encodeFrame);
-	/*avcodec_free_frame(&decodedFrame);*/
+	//avcodec_free_frame(&decodedFrame);
 
 	// now free the context
-	/*avformat_free_context(outputContext);*/
+	//avformat_free_context(outputContext);
 
 	// and finally close the input file
-	/*av_close_input_file(inputContext);*/
+	av_close_input_file(inputContext);
+
+*/
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header

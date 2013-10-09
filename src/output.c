@@ -26,6 +26,14 @@ static AVFormatContext * createFormatContext(const char * outputPath, const char
 	return output;
 }
 
+static Output * OutputInit(const EncodingJob * encodingJob) {
+
+	
+
+}
+
+
+
 
 /*
  * Write audio data to the current element

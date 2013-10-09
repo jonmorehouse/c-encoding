@@ -2,6 +2,7 @@
 #define ENCODE_H
 
 // now include project files
+#include "common.h"
 #include "output.h"
 #include "decode.h"
 
@@ -15,7 +16,7 @@
 #include <libavutil/imgutils.h>
 
 // now initialize an encoding job structure
-typedef struct {
+struct EncodingJob {
 	
 	int codecId;
 	int bitrate;
@@ -26,7 +27,7 @@ typedef struct {
 	char * outputPath;
 	char * outputFormat;
 
-} EncodingJob;
+};
 
 // now lets declare a namspace structure to export this module under
 typedef struct {
