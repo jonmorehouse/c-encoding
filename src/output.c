@@ -15,7 +15,12 @@ static void outputAudio(AVPacket * packet, AVFormatContext * output) {
  *
  *
  */
-static void outputVideo(AVPacket * packet, AVFormatContext * output) {
+static void writeVideoFrame(AVPacket * packet, AVFormatContext * outputContext) {
+	
+	// output video here		
+	av_write_frame(outputContext, packet);
+
+
 
 
 }
@@ -34,7 +39,7 @@ static void packetHandler(AVPacket * packet, AVFormatContext * outputContext) {
 	if (packet->stream_index == AVMEDIA_TYPE_VIDEO) {
 	
 		// now output video properly with the correct encoding elements
-		outputVideo(packet, outputContext);
+		writeVideoFrame(packet, outputContext);
 	}
 
 	// now lets take the packet stream index element 

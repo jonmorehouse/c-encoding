@@ -13,8 +13,8 @@
 // declare a structure type that is responsible for holding all the elements needed
 typedef struct {
 
-	void (* const outputAudio)(AVPacket *, AVFormatContext *);
-	void (* const outputVideo)(AVPacket *, AVFormatContext *);
+	void (* const writeVideoFrame)(AVPacket *, AVFormatContext *);
+	void (* const  writeAudioFrame)(AVPacket *, AVFormatContext *);
 	void (* const packetHandler)(AVPacket *, AVFormatContext *);
 
 } output_namespace;

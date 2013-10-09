@@ -6,6 +6,8 @@ Overview
 
 -	1.) Simple C program for encoding videos to multiple output
 -	2.) Minimal environment needed to run
+-	3.) [Transport Stream Overview](http://wiki.multimedia.cx/index.php?title=MPEG-2_Transport_Stream)
+-	4.) [Bitstream Info](http://stackoverflow.com/questions/16807647/how-do-i-use-bitstream-filters-in)
 	
 
 Installation

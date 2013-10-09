@@ -38,7 +38,7 @@ void testEncodeCreateOutputContext() {
 void testEncoding() {
 
 	char * const inputPath = "fixtures/sample-clip.mov";
-	char * const outputPath = "fixtures/output.ts";
+	char * const outputPath = "fixtures/output.mp4";
 	char * const format = "mpegts";
 
 	EncodingJob encodingJob = { .codecId = 1, .bitrate = 200000, .height = 300, .width = 400, .fps = 25.00, .codecId = AV_CODEC_ID_MPEG1VIDEO, .inputPath = inputPath, .outputPath = outputPath, .outputFormat = format};
