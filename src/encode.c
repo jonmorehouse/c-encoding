@@ -188,6 +188,8 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	
 	// now dump the format
 	av_dump_format(inputContext, 0, encodingJob->inputPath, 0);
+
+	outputContext->max_delay = 700;
 	
 	// write header to output container
 	avformat_write_header(outputContext, NULL);

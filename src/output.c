@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-static void outputAudio(AVPacket * packet, AVFormatContext * output) {
+static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
 	
 	
 }
@@ -18,10 +18,8 @@ static void outputAudio(AVPacket * packet, AVFormatContext * output) {
 static void writeVideoFrame(AVPacket * packet, AVFormatContext * outputContext) {
 	
 	// output video here		
-	av_write_frame(outputContext, packet);
-
-
-
+	av_interleaved_write_frame(outputContext, packet);
+		
 
 }
 
@@ -35,20 +33,21 @@ static void writeVideoFrame(AVPacket * packet, AVFormatContext * outputContext) 
  */
 static void packetHandler(AVPacket * packet, AVFormatContext * outputContext) {
 
+	writeVideoFrame(packet, outputContext);
 	// print out the dts element etc
 	if (packet->stream_index == AVMEDIA_TYPE_VIDEO) {
 	
 		// now output video properly with the correct encoding elements
-		writeVideoFrame(packet, outputContext);
+		/*writeVideoFrame(packet, outputContext);*/
 	}
 
 	// now lets take the packet stream index element 
 	else if (packet->stream_index == AVMEDIA_TYPE_AUDIO) {
 
 		// now lets call the correct output audio function
-		outputAudio(packet, outputContext);	
+		/*writeAudioFrame(packet, outputContext);	*/
 	}
 
 }
 
-output_namespace const output = {.packetHandler = packetHandler, .outputVideo = outputVideo};
+output_namespace const output = {.packetHandler = packetHandler, .writeAudioFrame = writeAudioFrame, .writeVideoFrame = writeVideoFrame};
