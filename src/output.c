@@ -34,25 +34,34 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 static Output * OutputInit(const EncodingJob * encodingJob) {
 	
 	// initialize an output structure on the heap 
-	Output * newOutput = malloc(sizeof(struct Output));
+	Output * job = malloc(sizeof(struct Output));
 		
 	// now initialize the output format context
-	newOutput->context = createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
+	job->context = createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
 
 	// cache our output format
-	newOutput->format = newOutput->context->oformat;
+	job->format = job->context->oformat;
 
+	// initialize output streams	
+	job->audioStream = NULL;
+	job->videoStream = NULL;
+			
+	printf("%s", "TEST");
 	// now generate the audio / video codec as needed
-	codec.createAudioCodec(newOutput, encodingJob);
+	// this will open the codec
+	codec.createAudioCodec(job, encodingJob);
 
 	// create the video output codec
-	codec.createVideoCodec(newOutput, encodingJob);
+	// this will open codec and do a few things to the stream
+	codec.createVideoCodec(job, encodingJob);
 	
+	// now set up any headers on the stream etc
+
 	// finally create the correct output streams
-	printf("%i", newOutput->format->video_codec);
+	printf("%i", job->format->video_codec);
 	
 	// return the new output pointer
-	return newOutput;
+	return job;
 }
 
 

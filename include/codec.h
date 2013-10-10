@@ -7,6 +7,8 @@
  *
 */
 #include "common.h"
+#include "encode.h"
+#include "output.h"
 
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>

@@ -38,9 +38,10 @@ void testEncodeCreateOutputContext() {
 	output = encode.createFormatContext(outputPath, "mpeg");
 }
 
-void testEncoding() {
+// run through and encode a job
+void testEncoding(EncodingJob * encodingJob) {
 
-	/*encode.encodeVideo(&encodingJob);*/
+	encode.encodeVideo(encodingJob);
 }
 
 void testOutput(EncodingJob * encodingJob) {
@@ -59,15 +60,8 @@ int main(int argc, char * argv[]) {
 	// initialize the encoding job
 	EncodingJob encodingJob = { .codecId = 1, .bitrate = 200000, .height = 300, .width = 400, .fps = 25.00, .codecId = AV_CODEC_ID_MPEG1VIDEO, .inputPath = inputPath, .outputPath = outputPath, .outputFormat = format};
 
-	// run output context creation test
-	/*testEncodeCreateOutputContext();*/
-
-	// just test the utilities for now
-	/*testGetFormatFromPath();*/
-
-	/*testEncoding();*/
-
-	/*testOutput();*/
+	// run a test encoding job	
+	testEncoding(&encodingJob);
 
 	//
 	return 0;
