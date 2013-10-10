@@ -2,7 +2,7 @@
 #define COMMON_H
 
 typedef struct EncodingJob EncodingJob;
-typedef struct Output Output;;
+typedef struct Output Output;
 
 #endif //COMMON_H
 

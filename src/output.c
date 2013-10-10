@@ -10,8 +10,8 @@
  */
 static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 
-	// 
-	av_register_all();
+	// register all codecs needed for application
+	av_register_all();	
 
 	// initialize a null pointer to the output context
 	AVFormatContext * output = NULL;
@@ -20,6 +20,7 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 	if (avformat_alloc_output_context2(&output, NULL, format, outputPath) < 0) {
 
 		// handle errors with elegance here!
+	
 	}
 	
 	// return context that was created
@@ -28,7 +29,6 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 
 /*
  * Initialize output struct for managing the various segments etc
- *
  *
  */
 static Output * OutputInit(const EncodingJob * encodingJob) {
@@ -39,6 +39,20 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	// now initialize the output format context
 	newOutput->context = createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
 
+	// cache our output format
+	newOutput->format = newOutput->context->oformat;
+
+	// now generate the audio / video codec as needed
+	codec.createAudioCodec(newOutput, encodingJob);
+
+	// create the video output codec
+	codec.createVideoCodec(newOutput, encodingJob);
+	
+	// finally create the correct output streams
+	printf("%i", newOutput->format->video_codec);
+	
+	// return the new output pointer
+	return newOutput;
 }
 
 

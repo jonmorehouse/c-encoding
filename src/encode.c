@@ -1,5 +1,6 @@
 #include "utilities.h"
 #include "encode.h"
+#include "output.h"
 
 // now include erroneous, temp libraries here
 #include <stdio.h>
@@ -108,9 +109,8 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	AVPacket decodedPacket;
 
 	// initialize the output element
-	/*Output * output = output.initOutput(encodingJob);*/
+	Output * currentOutput = output.OutputInit(encodingJob);
 
-/*
 	// now read the entire input file in a while loop!
 	while(av_read_frame(inputContext, &decodedPacket) >= 0) {
 	
@@ -118,6 +118,8 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 	}
 
+
+	/*
 	// now write the ending to the file
 	av_write_trailer(outputContext);
 

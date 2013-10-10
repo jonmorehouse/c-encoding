@@ -6,15 +6,15 @@
  *
  *
 */
-#include "encode.h"
+#include "common.h"
 
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 
 typedef struct {
 
-	AVCodec * (* const createAudioCodec)(AVFormatContext *, EncodingJob *);
-	AVCodec * (* const createVideoCodec)(AVFormatContext *, EncodingJob *);
+	AVCodec * (* const createAudioCodec)(Output *, EncodingJob *);
+	AVCodec * (* const createVideoCodec)(Output *, EncodingJob *);
 
 } codec_namespace;
 

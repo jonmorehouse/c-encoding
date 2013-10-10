@@ -3,6 +3,7 @@
 
 // now include the encode header
 #include "common.h"
+#include "codec.h"
 #include "encode.h"
 
 // now link up to the proper libraries needed 
@@ -17,12 +18,18 @@
 // encapsulate all of the information needed to output to a format etc
 struct Output{
 	
+	// initialize the context for output
 	AVFormatContext * context;
+	AVOutputFormat * format;
+
+	// initialize both codecs for this element
 	AVCodec * audioCodec;
 	AVCodec * videoCodec;
+
+	// initialize the streams for output 
 	AVStream * audioStream;
 	AVStream * videoStream;
-	int test;
+
 };
 
 // declare a structure type that is responsible for holding all the elements needed

@@ -1,16 +1,14 @@
 #include "codec.h"
 
 // create an output audio codec from the context passed in and encoding job passed in
-AVCodec * createAudioCodec(AVFormatContext * context, EncodingJob * encodingJob) {
-
-
-
+AVCodec * createAudioCodec(Output * currentOutput, EncodingJob * encodingJob) {
+	
+	
 
 }
 
 // create a video codec from the formatcontext and encodingjob given
-AVCodec * createVideoCodec(AVFormatContext * context, EncodingJob * encodingJob) {
-
+AVCodec * createVideoCodec(Output * currentOutput, EncodingJob * encodingJob) {
 
 
 
