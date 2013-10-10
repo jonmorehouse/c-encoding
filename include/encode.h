@@ -26,14 +26,13 @@ struct EncodingJob {
 	char * inputPath;
 	char * outputPath;
 	char * outputFormat;
-
 };
 
 // now lets declare a namspace structure to export this module under
 typedef struct {
 
 	// create the input format context etc
-	AVFormatContext * (* const createFormatContext)(const char *, const char *);
+	AVFormatContext * (* const createFormatContext)(char *, char *);
 
 	// initialize the codec for encoding output
 	void (* const initializeCodec)(AVCodec **, AVStream **, const AVFormatContext *, const EncodingJob *);	

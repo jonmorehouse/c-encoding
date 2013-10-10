@@ -8,7 +8,7 @@
  *  1.) Should parse the string and ensure that we are creating the correct output type
  *
  */
-static AVFormatContext * createFormatContext(const char * outputPath, const char * format) {
+static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 
 	// 
 	av_register_all();
@@ -26,12 +26,20 @@ static AVFormatContext * createFormatContext(const char * outputPath, const char
 	return output;
 }
 
+/*
+ * Initialize output struct for managing the various segments etc
+ *
+ *
+ */
 static Output * OutputInit(const EncodingJob * encodingJob) {
-
 	
+	// initialize an output structure on the heap 
+	Output * newOutput = malloc(sizeof(struct Output));
+		
+	// now initialize the output format context
+	newOutput->context = createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
 
 }
-
 
 
 
@@ -96,6 +104,7 @@ output_namespace const output = {
 
 	// create output format context
 	.createFormatContext = createFormatContext,
+	.OutputInit = OutputInit,
 	
 	// create a packet handler
 	.packetHandler = packetHandler, 
