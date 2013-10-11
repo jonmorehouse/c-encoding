@@ -22,7 +22,6 @@ void testGetFormatFromPath() {
 	const char * inputPath = "test.mov";
 	const char * format;
 
-	// 
 	format = utilities.getFormatFromPath(inputPath);
 
 	printf("%s", format);
@@ -59,7 +58,13 @@ int main(int argc, char * argv[]) {
 		.videoBitrate = 200000, 
 		.height = 300, 
 		.width = 400, 
-		.fps = 25.00, 
+
+		.fps = {
+			.num = 29970,
+			.den = 1000,
+		},
+
+		.gop_size = 12,
 
 		.audioBitrate = 64000, 
 		.sampleRate = 44100
@@ -68,7 +73,7 @@ int main(int argc, char * argv[]) {
 	// run a test encoding job	
 	testEncoding(&encodingJob);
 
-	//
+	// 
 	return 0;
 }
 

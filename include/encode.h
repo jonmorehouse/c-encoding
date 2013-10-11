@@ -30,12 +30,21 @@ struct EncodingJob {
 	int videoBitrate;
 	int height;
 	int width;
-	float fps;
+
+	// initialize time base for creating frames per second elements
+	// fps = 29970 / 1000 -- apple input elements
+	struct time_base {
+	
+		int num;
+		int den;
+	} fps;
+
+	// initialize gop_size - normally 12 for various elements etc
+	int gop_size;
 
 	// initialize / finetune audio elements 
 	int audioBitrate;
 	int sampleRate;	
-
 };
 
 // now lets declare a namspace structure to export this module under

@@ -103,7 +103,29 @@ AVCodec * createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	(*codecContext)->width = encodingJob->width;
 	(*codecContext)->height = encodingJob->height;
 
+	// set pixel format needed for this element
+	(*codecContext)->pix_fmt = AV_PIX_FMT_YUV420P; // initialize pixel format
 
+	// now initialize frame rate elements
+	// note that for fixed frame rate video time_base = fps/1
+	(*codecContext)->time_base.num = encodingJob->fps.num;
+	(*codecContext)->time_base.num = encodingJob->fps.den;
+
+	// initialize gop_size 
+	(*codecContext)->gop_size = encodingJob->gop_size;
+
+	// now initialize any further elements needed for creating the stream
+	// manual switches for mpeg2ts
+	if ((*codecContext)->codec_id == AV_CODEC_ID_MPEG2VIDEO)	
+		(*codecContext)->max_b_frames = 2;
+
+	// switch for mpeg1video to ensure that we have macro blocks controlled
+	if ((*codecContext)->codec_id == AV_CODEC_ID_MPEG1VIDEO)
+		(*codecContext)->mb_decision = 2;
+
+	// now initialize the stream  headers if necessary
+	if (job->format->flags && AVFMT_GLOBALHEADER)
+		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
 }
 
 // export the namespace variable
