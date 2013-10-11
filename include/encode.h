@@ -18,24 +18,28 @@
 // now initialize an encoding job structure
 struct EncodingJob {
 	
-	int codecId;
-	int bitrate;
-	int height;
-	int width;
-	float fps;
+	// introduce high level elements
 	char * inputPath;
 	char * outputPath;
 	char * outputFormat;
+
+	// high level codec information
+	int codecId;
+
+	// initialize lower level video elements
+	int videoBitrate;
+	int height;
+	int width;
+	float fps;
+
+	// initialize / finetune audio elements 
+	int audioBitrate;
+	int sampleRate;	
+
 };
 
 // now lets declare a namspace structure to export this module under
 typedef struct {
-
-	// create the input format context etc
-	AVFormatContext * (* const createFormatContext)(char *, char *);
-
-	// initialize the codec for encoding output
-	void (* const initializeCodec)(AVCodec **, AVStream **, const AVFormatContext *, const EncodingJob *);	
 
 	// pass in an inputPath and an output path for the encoding of the video
 	// in the future we will pass in a type of codec as well

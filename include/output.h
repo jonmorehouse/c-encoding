@@ -26,6 +26,10 @@ struct Output{
 	AVCodec * audioCodec;
 	AVCodec * videoCodec;
 
+	// initialize contexts for each of the output streams
+	AVCodecContext * audioCodecContext;
+	AVCodecContext * videoCodecContext;
+
 	// initialize the streams for output 
 	AVStream * audioStream;
 	AVStream * videoStream;

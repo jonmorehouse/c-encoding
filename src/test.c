@@ -28,16 +28,6 @@ void testGetFormatFromPath() {
 	printf("%s", format);
 }
 
-void testEncodeCreateOutputContext() {
-
-	// initialize the outputPath
-	char * const outputPath = "fixtures/test.mp4";
-	AVFormatContext * output;
-
-	// now lets call the function properly
-	output = encode.createFormatContext(outputPath, "mpeg");
-}
-
 // run through and encode a job
 void testEncoding(EncodingJob * encodingJob) {
 
@@ -58,7 +48,22 @@ int main(int argc, char * argv[]) {
 	static char * const format = "mpegts";
 
 	// initialize the encoding job
-	EncodingJob encodingJob = { .codecId = 1, .bitrate = 200000, .height = 300, .width = 400, .fps = 25.00, .codecId = AV_CODEC_ID_MPEG1VIDEO, .inputPath = inputPath, .outputPath = outputPath, .outputFormat = format};
+	EncodingJob encodingJob = { 
+		
+		.inputPath = inputPath, 
+		.outputPath = outputPath, 
+		.outputFormat = format,
+		
+		.codecId = AV_CODEC_ID_MPEG1VIDEO, 
+
+		.videoBitrate = 200000, 
+		.height = 300, 
+		.width = 400, 
+		.fps = 25.00, 
+
+		.audioBitrate = 64000, 
+		.sampleRate = 44100
+	};
 
 	// run a test encoding job	
 	testEncoding(&encodingJob);

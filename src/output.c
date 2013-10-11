@@ -46,7 +46,6 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	job->audioStream = NULL;
 	job->videoStream = NULL;
 			
-	printf("%s", "TEST");
 	// now generate the audio / video codec as needed
 	// this will open the codec
 	codec.createAudioCodec(job, encodingJob);
