@@ -45,7 +45,9 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	// initialize output streams	
 	job->audioStream = NULL;
 	job->videoStream = NULL;
-			
+
+	/* Create output streams as needed. Link them up with codec and create the correct codecs */			
+
 	// now generate the audio / video codec as needed
 	// this will open the codec
 	codec.createAudioCodec(job, encodingJob);
@@ -53,11 +55,10 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	// create the video output codec
 	// this will open codec and do a few things to the stream
 	codec.createVideoCodec(job, encodingJob);
-	
-	// now set up any headers on the stream etc
 
-	// finally create the correct output streams
-	printf("%i", job->format->video_codec);
+	/* */
+
+
 	
 	// return the new output pointer
 	return job;

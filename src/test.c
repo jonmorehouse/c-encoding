@@ -24,7 +24,6 @@ void testGetFormatFromPath() {
 
 	format = utilities.getFormatFromPath(inputPath);
 
-	printf("%s", format);
 }
 
 // run through and encode a job
