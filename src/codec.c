@@ -1,6 +1,6 @@
 #include "codec.h"
 
-/*
+// 
 void openCodec(Output * job, enum AVMedia_Type * type) {
 
 	if (type == AVMEDIA_TYPE_AUDIO) {
@@ -15,7 +15,7 @@ void openCodec(Output * job, enum AVMedia_Type * type) {
 	}
 
 }
-*/
+
 
 // create an output audio codec from the context passed in and encoding job passed in
 static void createAudioCodec(Output * job, EncodingJob * encodingJob) {

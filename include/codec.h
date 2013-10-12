@@ -16,8 +16,12 @@
 
 typedef struct {
 
+	// create individual codecs for each video stream
 	void (* const createAudioCodec)(Output *, EncodingJob *);
 	void (* const createVideoCodec)(Output *, EncodingJob *);
+
+	// open and initialize codecs based upon input streams
+	void (* const openCodec)(Output *, enum AVMediaType);
 
 } codec_namespace;
 
