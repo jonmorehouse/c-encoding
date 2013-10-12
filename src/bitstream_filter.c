@@ -46,13 +46,9 @@ static void filter(AVPacket ** inputPacket, Output * job, enum AVMediaType type)
 				packet->data, packet->size,
 				packet->flags & AV_PKT_FLAG_KEY);
 
-		printf("%i", filterResult);
-		printf("%s", "\n");
-
 		// now switch over the filter context
 		filterContext = filterContext->next;
 	}
-
 
 
 }

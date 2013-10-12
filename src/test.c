@@ -41,7 +41,7 @@ void testOutput(EncodingJob * encodingJob) {
 int main(int argc, char * argv[]) {
 
 	// initialize an encoding job and the pieces that are needed for it!
-	static char * const inputPath = "fixtures/sample-clip.mov";
+	static char * const inputPath = "fixtures/sample-clip.avi";
 	static char * const outputPath = "fixtures/output.mp4";
 	static char * const format = "mpegts";
 
