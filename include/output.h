@@ -5,6 +5,7 @@
 #include "common.h"
 #include "codec.h"
 #include "encode.h"
+#include "bitstream_filter.h"
 
 // now link up to the proper libraries needed 
 #include <libavformat/avformat.h>
@@ -34,6 +35,9 @@ struct Output{
 	AVStream * audioStream;
 	AVStream * videoStream;
 
+	// initialize bitstream filter context 
+	AVBitStreamFilterContext * bitStreamFilterContext;
+
 };
 
 // declare a structure type that is responsible for holding all the elements needed
@@ -46,9 +50,9 @@ typedef struct {
 	Output * (* const OutputInit)(EncodingJob *);
 
 	// writing to output elements
-	void (* const writeVideoFrame)(AVPacket *, AVFormatContext *);
-	void (* const  writeAudioFrame)(AVPacket *, AVFormatContext *);
-	void (* const packetHandler)(AVPacket *, AVFormatContext *);
+	void (* const writeVideoFrame)(AVPacket *, Output *);
+	void (* const  writeAudioFrame)(AVPacket *, Output *);
+	void (* const packetHandler)(AVPacket *, Output *)
 
 } output_namespace;
 

@@ -56,9 +56,8 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	// this will open codec and do a few things to the stream
 	codec.createVideoCodec(job, encodingJob);
 
-	/* */
-
-
+	/* Create bitstream filters */
+	bitstream_filter.initBitStreamFilters(job);
 	
 	// return the new output pointer
 	return job;
@@ -72,7 +71,7 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
  *
  */
 static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
-	
+
 	
 }
 
@@ -86,11 +85,9 @@ static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
  *
  */
 static void writeVideoFrame(AVPacket * packet, Output * job) {
-
 	
-
-
-
+	// first we need to filter the packet and see if that works!!
+	bitstream_filter.filter(&packet, job, AVMEDIA_TYPE_VIDEO);
 }
 
 
@@ -102,22 +99,21 @@ static void writeVideoFrame(AVPacket * packet, Output * job) {
  * 3.) send the packet to the correct function audio/video etc
  *
  */
-static void packetHandler(AVPacket * packet, AVFormatContext * outputContext) {
+static void packetHandler(AVPacket * packet, Output * job) {
 
-	writeVideoFrame(packet, outputContext);
 	
 	// print out the dts element etc
 	if (packet->stream_index == AVMEDIA_TYPE_VIDEO) {
 	
 		// now output video properly with the correct encoding elements
-		writeVideoFrame(packet, outputContext);
+		writeVideoFrame(packet, job);
 	}
 
 	// now lets take the packet stream index element 
 	else if (packet->stream_index == AVMEDIA_TYPE_AUDIO) {
 
 		// now lets call the correct output audio function
-		/*writeAudioFrame(packet, outputContext);	*/
+		writeAudioFrame(packet, job);	
 	}
 
 }

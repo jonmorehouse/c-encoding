@@ -14,10 +14,13 @@
 typedef struct {
 
 	// initialize the bitstream filters 
-	void (* const initBitstreamFilters)(Output *);	
+	void (* const initBitStreamFilters)(Output *);	
+
+	// close off all bitstream filters accordingly
+	void (* const closeBitStreamFilters)(Output *);
 
 	// filter the video using the packet
-	void (* const filter)(AVPacket *, Output *);
+	void (* const filter)(AVPacket *, Output *, enum AVMediaType);
 
 } bitstream_filter_namespace;
 
