@@ -85,13 +85,11 @@ static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
  *
  *
  */
-static void writeVideoFrame(AVPacket * packet, AVFormatContext * outputContext) {
+static void writeVideoFrame(AVPacket * packet, Output * job) {
 
-	// initialize the output bitstream filter context here
-	AVBitStreamFilterContext *bitstreamFilterContext = NULL; //outputStream->bitstream_filters;
+	
 
-	// output 		
-	av_interleaved_write_frame(outputContext, packet);
+
 
 }
 
@@ -107,11 +105,12 @@ static void writeVideoFrame(AVPacket * packet, AVFormatContext * outputContext) 
 static void packetHandler(AVPacket * packet, AVFormatContext * outputContext) {
 
 	writeVideoFrame(packet, outputContext);
+	
 	// print out the dts element etc
 	if (packet->stream_index == AVMEDIA_TYPE_VIDEO) {
 	
 		// now output video properly with the correct encoding elements
-		/*writeVideoFrame(packet, outputContext);*/
+		writeVideoFrame(packet, outputContext);
 	}
 
 	// now lets take the packet stream index element 

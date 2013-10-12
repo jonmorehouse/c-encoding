@@ -32,6 +32,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	while(av_read_frame(inputContext, &decodedPacket) >= 0) {
 	
 		// handle the encoding elements etc
+		output.packetHandler(&decodedPacket, currentOutput);
 
 	}
 
