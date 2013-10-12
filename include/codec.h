@@ -16,12 +16,12 @@
 
 typedef struct {
 
-	AVCodec * (* const createAudioCodec)(Output *, EncodingJob *);
-	AVCodec * (* const createVideoCodec)(Output *, EncodingJob *);
+	void (* const createAudioCodec)(Output *, EncodingJob *);
+	void (* const createVideoCodec)(Output *, EncodingJob *);
 
 } codec_namespace;
 
 // initialize the output codec etc
 extern codec_namespace const codec;
 
-#endif // codec_h
+#endif //codec_h

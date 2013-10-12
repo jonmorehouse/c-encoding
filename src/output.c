@@ -20,7 +20,6 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 	if (avformat_alloc_output_context2(&output, NULL, format, outputPath) < 0) {
 
 		// handle errors with elegance here!
-	
 	}
 	
 	// return context that was created

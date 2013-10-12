@@ -3,6 +3,7 @@
 static void initBitStreamFilters(Output * job) {
 	
 	avfilter_register_all();
+	
 	// cache filter name
 	const char * filterName = "h264_mp4toannexb";
 	/*const char * filterName = "mjpeg2jpeg";*/

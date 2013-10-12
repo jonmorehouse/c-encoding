@@ -1,20 +1,35 @@
 #include "codec.h"
 
+/*
+void openCodec(Output * job, enum AVMedia_Type * type) {
+
+	if (type == AVMEDIA_TYPE_AUDIO) {
+
+
+	}
+
+	else {
+
+
+
+	}
+
+}
+*/
+
 // create an output audio codec from the context passed in and encoding job passed in
-AVCodec * createAudioCodec(Output * job, EncodingJob * encodingJob) {
+static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 
 	/*** Initialize proper data structures for elements ****/
-
 	// codecID is generated from the format
 	enum AVCodecID codecID = job->format->audio_codec;
 
 	// initialize the audio context etc
 	AVCodec ** codec = &job->audioCodec;
+	// intiialize a pointer that is linked to the output element
 	AVCodecContext ** codecContext = &job->audioCodecContext;
 	AVStream ** stream = &job->audioStream;
 
-	AVStream * st;
-	AVCodecContext * cc;
 	/*** Now initialize the correct encoder for the format ***/
 
 	// check to see if the codec is initialized yet
@@ -24,12 +39,6 @@ AVCodec * createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	
 	// now initialize the codec
 	*codec = avcodec_find_encoder(codecID);	
-
-	st = avformat_new_stream(job->context, *codec);
-
-	cc = st->codec;
-	printf("%s", st->codec->codec_name);
-	printf("%s", "\n");
 
 	// check to ensure that the video encoder handles itself properly
 	if (!(*codec)) ;// handle errors nicely for encoder creation
@@ -66,11 +75,10 @@ AVCodec * createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	// now lets see if format wants stream headers to be seperate etc
 	if (job->context->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
-
 }
 
 // create a video codec from the formatcontext and encodingjob given
-AVCodec * createVideoCodec(Output * job, EncodingJob * encodingJob) {
+static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 
 	/**** Initialize data structures to assist with stream creation ***/ 
 	enum AVCodecID codecID = job->format->video_codec;
@@ -138,8 +146,6 @@ AVCodec * createVideoCodec(Output * job, EncodingJob * encodingJob) {
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
 	// 
-
-
 }
 
 // export the namespace variable
