@@ -13,6 +13,8 @@ AVCodec * createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	AVCodecContext ** codecContext = &job->audioCodecContext;
 	AVStream ** stream = &job->audioStream;
 
+	AVStream * st;
+	AVCodecContext * cc;
 	/*** Now initialize the correct encoder for the format ***/
 
 	// check to see if the codec is initialized yet
@@ -23,6 +25,12 @@ AVCodec * createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	// now initialize the codec
 	*codec = avcodec_find_encoder(codecID);	
 
+	st = avformat_new_stream(job->context, *codec);
+
+	cc = st->codec;
+	printf("%s", st->codec->codec_name);
+	printf("%s", "\n");
+
 	// check to ensure that the video encoder handles itself properly
 	if (!(*codec)) ;// handle errors nicely for encoder creation
 
@@ -30,7 +38,7 @@ AVCodec * createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	*stream = avformat_new_stream(job->context, *codec);
 
 	// now ensure that we initialize the stream correctly etc
-	if (!*stream) ;//handle errors nicely
+	if (!*stream) printf("%s", "no stream");//handle errors nicely
 
 	// now lets initialize the stream id according to the context
 	// this could be easier, but we want to make sure that if we were to call this later / earlier we would still be good
@@ -58,6 +66,7 @@ AVCodec * createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	// now lets see if format wants stream headers to be seperate etc
 	if (job->context->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
+
 }
 
 // create a video codec from the formatcontext and encodingjob given
@@ -114,6 +123,7 @@ AVCodec * createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// initialize gop_size 
 	(*codecContext)->gop_size = encodingJob->gop_size;
 
+
 	// now initialize any further elements needed for creating the stream
 	// manual switches for mpeg2ts
 	if ((*codecContext)->codec_id == AV_CODEC_ID_MPEG2VIDEO)	
@@ -126,6 +136,10 @@ AVCodec * createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// now initialize the stream  headers if necessary
 	if (job->format->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
+
+	// 
+
+
 }
 
 // export the namespace variable
