@@ -4,16 +4,13 @@
 void openCodec(Output * job, enum AVMedia_Type * type) {
 
 	if (type == AVMEDIA_TYPE_AUDIO) {
-
+		
 
 	}
 
 	else {
 
-
-
 	}
-
 }
 
 
@@ -149,4 +146,11 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 }
 
 // export the namespace variable
-codec_namespace const codec = {.createAudioCodec = createAudioCodec, .createVideoCodec = createVideoCodec};
+codec_namespace const codec = {
+	
+	.createAudioCodec = createAudioCodec, 
+	.createVideoCodec = createVideoCodec,
+
+	.openCodec = openCodec
+
+};

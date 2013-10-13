@@ -55,6 +55,13 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	// this will open codec and do a few things to the stream
 	codec.createVideoCodec(job, encodingJob);
 
+	// now lets open both codecs 
+	// open audio codec
+	codec.openCodec(job, AVMEDIA_TYPE_AUDIO);
+
+	// open video codec
+	codec.openCodec(job, AVMEDIA_TYPE_VIDEO);
+
 	/* Create bitstream filters */
 	bitstream_filter.initBitStreamFilters(job);
 	
