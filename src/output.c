@@ -41,8 +41,21 @@ void test(AVFormatContext * context) {
 
 	avcodec_get_context_defaults3(c, codec);
 
+	// now lets see if there is an issue with our codec!
+	c = avcodec_alloc_context3(codec);
+
+	int returnval;
+
+	returnval = avcodec_open2(c, codec, NULL);
+
+	printf("%i" "\n", returnval);
+
+	fprintf("%s", av_err2str(returnval));
+
 	printf("%p" "\n", c->codec);
 	printf("%p" "\n", codec);
+
+
 
 	avcodec_open2(c, codec, NULL);
 }
