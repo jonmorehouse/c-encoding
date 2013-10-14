@@ -6,7 +6,6 @@
  * Create a valid output context given a file name
  * 
  *  1.) Should parse the string and ensure that we are creating the correct output type
- *
  */
 static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 
@@ -21,7 +20,7 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 
 		// handle errors with elegance here!
 	}
-	
+
 	// return context that was created
 	return output;
 }
@@ -33,7 +32,7 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 static Output * OutputInit(const EncodingJob * encodingJob) {
 	
 	// initialize an output structure on the heap 
-	Output * job = malloc(sizeof(struct Output));
+	Output * job = malloc(sizeof(Output));
 		
 	// now initialize the output format context
 	job->context = createFormatContext(encodingJob->outputPath, encodingJob->outputFormat);
@@ -57,13 +56,13 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 
 	// now lets open both codecs 
 	// open audio codec
-	codec.openCodec(job, AVMEDIA_TYPE_AUDIO);
+	/*codec.openCodec(job, AVMEDIA_TYPE_AUDIO);*/
 
 	// open video codec
-	codec.openCodec(job, AVMEDIA_TYPE_VIDEO);
+	/*codec.openCodec(job, AVMEDIA_TYPE_VIDEO);*/
 
 	/* Create bitstream filters */
-	bitstream_filter.initBitStreamFilters(job);
+	/*bitstream_filter.initBitStreamFilters(job);*/
 	
 	// return the new output pointer
 	return job;
@@ -78,7 +77,7 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
  */
 static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
 
-	
+
 }
 
 
@@ -121,7 +120,6 @@ static void packetHandler(AVPacket * packet, Output * job) {
 		// now lets call the correct output audio function
 		writeAudioFrame(packet, job);	
 	}
-
 }
 
 output_namespace const output = {

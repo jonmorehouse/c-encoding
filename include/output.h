@@ -38,6 +38,8 @@ struct Output{
 	// initialize bitstream filter context 
 	AVBitStreamFilterContext * bitStreamFilterContext;
 
+	char * test;
+
 };
 
 // declare a structure type that is responsible for holding all the elements needed

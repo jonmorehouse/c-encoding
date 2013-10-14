@@ -39,6 +39,11 @@ test: $(OBJECTS) $(SRCDIR)/test.c
 
 	@$(CC) $(CFLAGS) $(LDLIBS) $(OBJECTS) $(SRCDIR)/test.c -o test.out
 
+# debug version
+debug: $(OBJECTS) $(SRCDIR)/test.c
+
+	@$(CC) $(CFLAGS) -g $(LDLIBS) $(OBJECTS) $(SRCDIR)/test.c -o test.out
+
 # main output file
 main.out: $(OBJECTS) $(SRCDIR)/main.c
 

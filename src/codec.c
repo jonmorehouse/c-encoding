@@ -67,10 +67,10 @@ int selectChannelLayout(AVCodec * codec) {
 
 // open codec based upon input type
 void openCodec(Output * job, enum AVMedia_Type * type) {
-	
+
 	// initialize some temp pointers for the necessary pieces of opening the video codec 
-	AVCodec * codec;
-	AVStream * stream;
+	AVCodec * codec = NULL;
+	AVStream * stream = NULL;
 	AVCodecContext * codecContext;
 	
 	// check status of codec opening
@@ -78,29 +78,30 @@ void openCodec(Output * job, enum AVMedia_Type * type) {
 
 	// now use some audio/video logic to generate the correct streams etc 
 	if (type == AVMEDIA_TYPE_AUDIO) {
+
+		printf("%s", "audio\n");
 		stream = job->audioStream;
 		codec = job->audioCodec;
 
 	} else {
 
+		printf("%s", "video\n");
 		stream = job->videoStream;
 		codec = job->videoCodec;
 	}
 
 	// now ensure that we have a valid stream initialized 
-	if (stream == NULL) ;//handle error with grace
+	/*printf("%s", codec->name);*/
+	printf("%s", stream->codec->codec_name);
 
 	// now lets grab the correct codec context
 	// http://ffmpeg.org/doxygen/trunk/structAVCodecContext.html
-	codecContext = stream->codec;
+	/*codecContext = stream->codec;*/
 
 	// now we need to open our video
-	codecStatus = avcodec_open2(codecContext, codec, NULL); 	
+	/*codecStatus = avcodec_open2(codecContext, codec, NULL); 	*/
 
 	// now lets print out the result
-	printf("%i", codecStatus);
-	printf("%s", "\n");
-
 
 }
 
@@ -166,6 +167,7 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	// now lets see if format wants stream headers to be seperate etc
 	if (job->context->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
+
 }
 
 // create a video codec from the formatcontext and encodingjob given
@@ -186,7 +188,7 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 
 	// now build out the codec encoder
 	*codec = avcodec_find_encoder(codecID);
-
+	
 	// if the stream isn't created, then go ahead and throw an error
 	if (!(*codec)) ;//handle errors here
 
@@ -222,6 +224,8 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// initialize gop_size 
 	(*codecContext)->gop_size = encodingJob->gop_size;
 
+	// set frame rate tolerance
+	(*codecContext)->bit_rate_tolerance = 256000;
 
 	// now initialize any further elements needed for creating the stream
 	// manual switches for mpeg2ts
@@ -235,6 +239,7 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// now initialize the stream  headers if necessary
 	if (job->format->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
+
 
 }
 
