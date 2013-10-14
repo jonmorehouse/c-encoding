@@ -1,16 +1,88 @@
 #include "codec.h"
 
-// 
-void openCodec(Output * job, enum AVMedia_Type * type) {
+// select high sample rate for creation in codec
+int selectSampleRate(AVCodec * codec) {
 
-	if (type == AVMEDIA_TYPE_AUDIO) {
+}
+
+// return the correct channel 
+int selectChannelLayout(AVCodec * codec) {
+	
+	const uint64_t * iterator;
+	uint64_t bestChannelLayout = 0;
+	int bestNumberChannels = 0;
+
+	// now lets see if there is no channel layouts etc
+	// if there aren't any channel layouts just use stereo
+	if (!codec->channel_layouts) printf("%s", "test");
 		
+	return 0;
+		/*return AV_CH_LAYOUT_STEREO;*/
 
+	printf("%i", codec->channel_layouts);
+
+	// now lets loop through the channels and select the best fitting one
+	iterator = codec->channel_layouts;
+
+	// now initialize the iterator
+	while (*iterator) {
+	
+		printf("%i", iterator);
+		/*
+		int numberChannels = av_get_channel_layout_nb_channels(*iterator);
+
+		// grab the number of channels needed
+		if (numberChannels > bestNumberChannels) {
+
+			bestChannelLayout = *iterator;
+			bestNumberChannels = numberChannels;
+		}
+		*/
+
+		iterator++;
 	}
 
-	else {
+	// return the best guessed channel layout
+	return bestChannelLayout;
+}
 
+// open codec based upon input type
+void openCodec(Output * job, enum AVMedia_Type * type) {
+	
+	// initialize some temp pointers for the necessary pieces of opening the video codec 
+	AVCodec * codec;
+	AVStream * stream;
+	AVCodecContext * codecContext;
+	
+	// check status of codec opening
+	int codecStatus;
+
+	// now use some audio/video logic to generate the correct streams etc 
+	if (type == AVMEDIA_TYPE_AUDIO) {
+		stream = job->audioStream;
+		codec = job->audioCodec;
+
+	} else {
+
+		stream = job->videoStream;
+		codec = job->videoCodec;
 	}
+
+	// now ensure that we have a valid stream initialized 
+	if (stream == NULL) ;//handle error with grace
+
+	// now lets grab the correct codec context
+	// http://ffmpeg.org/doxygen/trunk/structAVCodecContext.html
+	codecContext = stream->codec;
+
+	// now we need to open our video
+	codecStatus = avcodec_open2(codecContext, codec, NULL); 	
+
+	// now lets print out the result
+	printf("%i", codecStatus);
+	printf("%s", "\n");
+
+
 }
 
 
@@ -68,7 +140,8 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	
 	// we normally use 2 channels for audio 
 	(*codecContext)->channels = 2;
-	
+	(*codecContext)->channel_layout = selectChannelLayout(codec);
+
 	// now lets see if format wants stream headers to be seperate etc
 	if (job->context->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
