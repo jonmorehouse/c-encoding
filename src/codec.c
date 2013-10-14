@@ -18,9 +18,8 @@ int selectChannelLayout(AVCodec * codec) {
 	// if there aren't any channel layouts just use stereo
 	if (!codec->channel_layouts) return AV_CH_LAYOUT_STEREO;
 
-	printf("%" PRIu64 "\n", codec->channel_layouts[0]);
-
-	return;
+	// cache the iterator
+	iterator = codec->channel_layouts; 
 
 	// loop through the aray of channel layouts 
 	while (*iterator) {
@@ -43,7 +42,6 @@ int selectChannelLayout(AVCodec * codec) {
 	}
 
 	return bestChannelLayout;
-
 }
 
 // open codec based upon input type
@@ -107,9 +105,7 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	if (job->format == AV_CODEC_ID_NONE) ;//handle errors here
 	
 	// now initialize the codec
-	*codec = avcodec_find_encoder();	
-
-	printf("%" PRIu64 "\n", (*codec)->channel_layouts[0]);
+	*codec = avcodec_find_encoder(codecID);	
 
 	// check to ensure that the video encoder handles itself properly
 	if (!(*codec)) ;// handle errors nicely for encoder creation
