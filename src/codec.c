@@ -142,8 +142,11 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	// this could be easier, but we want to make sure that if we were to call this later / earlier we would still be good
 	(*stream)->id = job->context->nb_streams - 1;
 
+
 	// now link up the stream codec to the output codec
 	*codecContext = (*stream)->codec;
+
+	printf("%p" "\n", codecContext); 
 
 	// now initialize the actual codec elements etc
 	(*stream)->id = 1;	
