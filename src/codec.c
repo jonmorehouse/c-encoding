@@ -1,4 +1,5 @@
 #include "codec.h"
+#include "inttypes.h"
 
 // select high sample rate for creation in codec
 int selectSampleRate(AVCodec * codec) {
@@ -8,42 +9,43 @@ int selectSampleRate(AVCodec * codec) {
 // return the correct channel 
 int selectChannelLayout(AVCodec * codec) {
 	
+	// create a pointer to the codec channels array
 	const uint64_t * iterator;
 	uint64_t bestChannelLayout = 0;
 	int bestNumberChannels = 0;
 
 	// now lets see if there is no channel layouts etc
 	// if there aren't any channel layouts just use stereo
-	if (!codec->channel_layouts) printf("%s", "test");
-		
-	return 0;
-		/*return AV_CH_LAYOUT_STEREO;*/
-
-	printf("%i", codec->channel_layouts);
+	if (!codec->channel_layouts) return AV_CH_LAYOUT_STEREO;
 
 	// now lets loop through the channels and select the best fitting one
 	iterator = codec->channel_layouts;
 
-	// now initialize the iterator
+	printf("%i" "\n", iterator);
+
+	return;
+	// loop through the aray of channel layouts 
 	while (*iterator) {
-	
-		printf("%i", iterator);
-		/*
+
+		// get the number of channels for this particular layout
 		int numberChannels = av_get_channel_layout_nb_channels(*iterator);
 
-		// grab the number of channels needed
 		if (numberChannels > bestNumberChannels) {
 
+			// grab the current dereferenced value
 			bestChannelLayout = *iterator;
-			bestNumberChannels = numberChannels;
-		}
-		*/
 
+			// best number of channels etc
+			bestNumberChannels = numberChannels;
+
+		}
+
+		// now increase the iterator
 		iterator++;
 	}
 
-	// return the best guessed channel layout
 	return bestChannelLayout;
+
 }
 
 // open codec based upon input type
@@ -139,7 +141,6 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	(*codecContext)->sample_rate = encodingJob->sampleRate;
 	
 	// we normally use 2 channels for audio 
-	(*codecContext)->channels = 2;
 	(*codecContext)->channel_layout = selectChannelLayout(codec);
 
 	// now lets see if format wants stream headers to be seperate etc
