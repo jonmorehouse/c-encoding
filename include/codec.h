@@ -13,11 +13,13 @@
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
+#include <libavutil/common.h>
 #include <libavutil/channel_layout.h>
 
 typedef struct {
 
-	int (* const selectChannelLayout)(AVCodec * Codec);
+	int (* const selectSampleRate)(AVCodec *);
+	int (* const selectChannelLayout)(AVCodec *);
 
 	// create individual codecs for each video stream
 	void (* const createAudioCodec)(Output *, EncodingJob *);

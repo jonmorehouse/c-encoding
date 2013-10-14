@@ -1,8 +1,29 @@
 #include "codec.h"
-#include "inttypes.h"
 
 // select high sample rate for creation in codec
 int selectSampleRate(AVCodec * codec) {
+
+	const int *iterator;
+	int bestSampleRate = 0;
+
+	// if no codec supported samplerates
+	if (!codec->supported_samplerates)
+		return 44100;
+
+	// cache a pointer to the supported samplerates for this codec
+	iterator = codec->supported_samplerates;
+
+	// loop through the array
+	while (*iterator) {
+
+		// now lets check to see if this samplerate is higher than the previous one
+		if (*iterator > bestSampleRate) bestSampleRate = FFMAX(*iterator, bestSampleRate);
+
+		// increase the iterator
+		iterator++;
+	}
+
+	return bestSampleRate;
 
 }
 
@@ -134,10 +155,13 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	(*codecContext)->bit_rate = encodingJob->audioBitrate;
 
 	// audio samples per second
-	(*codecContext)->sample_rate = encodingJob->sampleRate;
+	(*codecContext)->sample_rate = selectSampleRate(*codec);
 	
 	// we normally use 2 channels for audio 
 	(*codecContext)->channel_layout = selectChannelLayout(*codec);
+
+	// grab the correct number of channels based upon the best selected audio channel layout
+	(*codecContext)->channels = av_get_channel_layout_nb_channels((*codecContext)->channel_layout);
 
 	// now lets see if format wants stream headers to be seperate etc
 	if (job->context->flags && AVFMT_GLOBALHEADER)
@@ -212,15 +236,20 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	if (job->format->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
-	// 
 }
 
 // export the namespace variable
 codec_namespace const codec = {
 	
+	// helper utilities
+	.selectChannelLayout = selectChannelLayout,
+	.selectSampleRate = selectSampleRate,
+
+	// create audio codecs
 	.createAudioCodec = createAudioCodec, 
 	.createVideoCodec = createVideoCodec,
 
+	// now actually open the codec correctly
 	.openCodec = openCodec
 
 };
