@@ -8,7 +8,7 @@ int selectSampleRate(AVCodec * codec) {
 
 // return the correct channel 
 int selectChannelLayout(AVCodec * codec) {
-	
+
 	// create a pointer to the codec channels array
 	const uint64_t * iterator;
 	uint64_t bestChannelLayout = 0;
@@ -18,12 +18,10 @@ int selectChannelLayout(AVCodec * codec) {
 	// if there aren't any channel layouts just use stereo
 	if (!codec->channel_layouts) return AV_CH_LAYOUT_STEREO;
 
-	// now lets loop through the channels and select the best fitting one
-	iterator = codec->channel_layouts;
-
-	printf("%i" "\n", iterator);
+	printf("%" PRIu64 "\n", codec->channel_layouts[0]);
 
 	return;
+
 	// loop through the aray of channel layouts 
 	while (*iterator) {
 
@@ -109,7 +107,9 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	if (job->format == AV_CODEC_ID_NONE) ;//handle errors here
 	
 	// now initialize the codec
-	*codec = avcodec_find_encoder(codecID);	
+	*codec = avcodec_find_encoder();	
+
+	printf("%" PRIu64 "\n", (*codec)->channel_layouts[0]);
 
 	// check to ensure that the video encoder handles itself properly
 	if (!(*codec)) ;// handle errors nicely for encoder creation
@@ -141,7 +141,7 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	(*codecContext)->sample_rate = encodingJob->sampleRate;
 	
 	// we normally use 2 channels for audio 
-	(*codecContext)->channel_layout = selectChannelLayout(codec);
+	(*codecContext)->channel_layout = selectChannelLayout(*codec);
 
 	// now lets see if format wants stream headers to be seperate etc
 	if (job->context->flags && AVFMT_GLOBALHEADER)
