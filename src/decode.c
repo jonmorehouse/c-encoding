@@ -33,9 +33,17 @@ static AVFormatContext * getFormatContext(const char * inputPath) {
 // responsible for taking the decoded packet and placing it into the raw data buffer for easy encoding and output
 static void decodeVideo(Input * input) {
 
-		
+	// decode result
+	int decodeResult, gotFrame;
 
+	// initialize the input frame
+	if (!input->frame) input->frame = avcodec_alloc_frame();
 
+	// initialize decodedResult 
+	decodeResult = avcodec_decode_video2(input->videoCodecContext, input->frame, &gotFrame, input->packet);
+
+	// initialize decoded result
+	if (decodeResult < 0) ;
 
 
 }
