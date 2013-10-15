@@ -1,19 +1,21 @@
 #include "write.h"
 
-// write a frame
-// assume that the packet was already filtered
-static void writeFrame(AVPacket * packet, Output * job, enum AVMedia_Type * type) {
+static void writeAudioFrame(Input * input, Output * job) {
 
-	int encodeResult;	
-
-	/*encodeResult = avcodec_encode_video2r);*/
-	
 
 
 }
 
+static void writeVideoFrame(Input * input, Output * job) {
+
+
+
+}
+
+
 write_namespace const write = {
-	
-	.writeFrame = writeFrame
+
+	.writeVideoFrame = writeVideoFrame,
+	.writeAudioFrame = writeAudioFrame
 
 };

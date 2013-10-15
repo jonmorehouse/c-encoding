@@ -62,7 +62,6 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 
 	// now that we have opened out codecs etc we need to write the correct headers
 	/*av_dump_format(job->context, 0, encodingJob->outputPath, 1);*/
-	printf("%s", "test\n");
 
 	// open the output file if necessary
 	if (!(job->format->flags & AVFMT_NOFILE)) {
@@ -87,43 +86,6 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 	// return the new output pointer
 	return job;
 }
-
-/*
- * Write audio data to the current element
- *
- *
- */
-static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
-
-	
-}
-
-
-/*
- * Output encoded video to the output context
- *
- * 1.) We need to apply annexb bitstream filter 
- * 2.) Will expect that we are passing in a stream that needs to be written to as well
- *
- *
- */
-static void writeVideoFrame(AVPacket * packet, Output * job) {
-	
-	// first we need to filter the packet and see if that works!!
-	/*bitstream_filter.filter(&packet, job, AVMEDIA_TYPE_VIDEO);*/
-	int ret;
-	static struct SwsContext * sws_ctx;
-	AVCodecContext * c = job->videoStream->codec;
-	
-	/*printf("size: " "%i" "\n", packet->size);*/
-	/*printf("dts: " "%i" "\n", packet->dts);*/
-	/*printf("pts: " "%i" "\n", packet->pts);*/
-
-	ret = av_interleaved_write_frame(job->context, packet);
-	printf("return: " "%i" "\n", ret);
-
-}
-
 
 /*
  * Packet handler is responsible for taking in an output context and then a packet and then doing magical shit!!
@@ -154,7 +116,7 @@ static void packetHandler(Input * input, Output * job) {
 		decode.decodeVideo(input);
 
 		// now output video properly with the correct encoding elements
-		/*writeVideoFrame(input->packet, job);*/
+		write.writeVideoFrame(input, job);
 	}
 
 	// now lets take the packet stream index element 
@@ -164,9 +126,8 @@ static void packetHandler(Input * input, Output * job) {
 		decode.decodeAudio(input);
 
 		// now lets call the correct output audio function
-		/*writeAudioFrame(input->packet, job);	*/
+		write.writeAudioFrame(input, job);	
 	}
-
 }
 
 // output element
@@ -178,7 +139,5 @@ output_namespace const output = {
 	
 	// create a packet handler
 	.packetHandler = packetHandler, 
-	.writeAudioFrame = writeAudioFrame, 
-	.writeVideoFrame = writeVideoFrame
 
 };

@@ -58,8 +58,6 @@ typedef struct {
 	Output * (* const OutputInit)(const EncodingJob *, const Input *);
 
 	// writing to output elements
-	void (* const writeVideoFrame)(AVPacket *, Output *);
-	void (* const  writeAudioFrame)(AVPacket *, Output *);
 	void (* const packetHandler)(Input *, Output *)
 
 } output_namespace;

@@ -17,8 +17,9 @@
 // initialize a structure for this namespace 
 typedef struct {
 	
-	// now establish all of the various functions needed for this element
-	void (* const writeFrame)(AVPacket *, Output *, enum AVMedia_Type *);
+	void (* const writeVideoFrame)(Input *, Output *);
+	void (* const  writeAudioFrame)(Input *, Output *);
+
 
 } write_namespace;
 
