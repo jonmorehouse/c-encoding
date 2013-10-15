@@ -33,6 +33,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	// now read the entire input file in a while loop!
 	while(av_read_frame(input->context, input->packet) >= 0) {
 
+		break;
 		// handle the encoding elements etc
 		output.packetHandler(input, job);
 	

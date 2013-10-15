@@ -90,13 +90,25 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 
 	// ensure that we crate the frame needed successfully
 	if (!job->frame) ;// handle errors here with elegance
-	
+
+	// now lets allocate the correct amount of data needed for the frame 2 container
+	job->frameBufferSize = avpicture_get_size(job->videoCodecContext->pix_fmt, job->videoCodecContext->width, job->videoCodecContext->height);
+
+
+	// initialize and build out our frame buffer on the heap
+	job->frameBuffer = (uint8_t *)av_malloc(job->frameBufferSize * sizeof(uint8_t));
+
+	// now lets fill the picture and link up the element with this
+	// this avpicture fill is used to set up the element with the correct frame buffer
+	avpicture_fill((AVPicture*)job->frame, job->frameBuffer, job->videoCodecContext->pix_fmt, job->videoCodecContext->width, job->videoCodecContext->height);
+
 	// return the new output pointer
 	return job;
 }
 
 static void OutputClose(Output * job) {
 
+	return;
 	// write the trailer as needed
 	av_write_trailer(job->context);
 	

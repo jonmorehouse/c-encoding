@@ -46,6 +46,10 @@ struct Output{
 	// initialize output packet and frame for actual creation fo the output streams and frames etc
 	AVFrame * frame;
 	AVPacket * packet;
+
+	// initialize framebuffer pointer
+	uint8_t * frameBuffer;
+	int frameBufferSize;
 };
 
 // declare a structure type that is responsible for holding all the elements needed
