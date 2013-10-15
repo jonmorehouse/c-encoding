@@ -33,7 +33,8 @@ static AVFormatContext * getFormatContext(const char * inputPath) {
 // responsible for taking the decoded packet and placing it into the raw data buffer for easy encoding and output
 static void decodeVideo(Input * input) {
 
-	// the packet should be of a different size	
+		
+
 
 
 
@@ -41,8 +42,20 @@ static void decodeVideo(Input * input) {
 
 static void decodeAudio(Input * input) {
 
+	// initialize helper variables for use here
+	int decodeResult, gotFrame;
+	
+	// the packet should be of a different size	
+	// now lets ensure that we have a frame for this 
+	if (!input->frame) input->frame = avcodec_alloc_frame();
+	
+	// if we do, reset it
+	else avcodec_get_frame_defaults(input->frame);
 
+	// now decode the audio from the packet into the frame
+	/*decodeResult = avcodec_decode_audio4(input->audioCodecContext, input->frame, &gotFrame, input->packet);*/
 
+	/*if (decodeResult > 0) printf("%s", "bad");*/
 
 }
 
@@ -71,6 +84,10 @@ Input * InputInit(const char * inputPath) {
 
 			// now lets ensure that we grabbed the correct input audioCodec
 			if (!input->audioCodec) ;// handle errors here with elegance
+
+			// now open the codec context
+			if (avcodec_open2(input->audioCodecContext, input->audioCodec, NULL) < 0) printf("%s", "bad");// handle errors here
+
 		}
 
 		// initialize the video stream information as needed
@@ -84,6 +101,10 @@ Input * InputInit(const char * inputPath) {
 
 			// now ensure that the video codec is there
 			if (!input->videoCodec) ;//
+
+			// now open the codec context
+			if (avcodec_open2(input->videoCodecContext, input->videoCodec, NULL) < 0) ;// handle errors here
+
 
 		}
 	}

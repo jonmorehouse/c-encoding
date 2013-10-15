@@ -132,8 +132,11 @@ static void packetHandler(Input * input, Output * job) {
 	// also assume that the input buffer is cleared out
 	if (input->bufferSize < input->packet->size) {
 
+		// reset the buffersize to be the correct packet size
 		input->bufferSize = input->packet->size;
+		// now reallocate any memory that was here previously
 		input->buffer = (uint8_t *)realloc(input->buffer, input->bufferSize * sizeof(uint8_t));
+		
 	}
 	
 	// print out the dts element etc
