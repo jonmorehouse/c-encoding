@@ -16,16 +16,16 @@ struct Input {
 	AVFrame * frame;
 	AVPacket * packet;
 
-	// number of bytes we are permitting for this application
-	// this is guessed based upon the size of the input picture
-	int bufferSize;
-
 	// whether or not we got a frame
 	int gotFrame;
 
+	// number of bytes we are permitting for this application
+	// this is guessed based upon the size of the input picture
+	int frameBufferSize;
+
 	// now create a place to store this input buffered data
 	// this should be rotated between audio/video for best performance
-	uint8_t * buffer;
+	uint8_t * frameBuffer;
 
 	// initialize audio elements
 	AVCodec * audioCodec;

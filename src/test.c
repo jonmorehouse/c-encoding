@@ -39,7 +39,7 @@ int main(int argc, char * argv[]) {
 
 	// initialize an encoding job and the pieces that are needed for it!
 	static char * const inputPath = "fixtures/sample-clip.mp4";
-	static char * const outputPath = "fixtures/output.mp4";
+	static char * const outputPath = "fixtures/output.ts";
 	static char * const format = "mpegts";
 
 	// initialize the encoding job
@@ -49,8 +49,6 @@ int main(int argc, char * argv[]) {
 		.outputPath = outputPath, 
 		.outputFormat = format,
 		
-		.codecId = AV_CODEC_ID_MPEG1VIDEO, 
-
 		.videoBitrate = 200000, 
 		.height = 300, 
 		.width = 400, 

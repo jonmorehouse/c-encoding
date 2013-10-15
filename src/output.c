@@ -94,7 +94,6 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 	// now lets allocate the correct amount of data needed for the frame 2 container
 	job->frameBufferSize = avpicture_get_size(job->videoCodecContext->pix_fmt, job->videoCodecContext->width, job->videoCodecContext->height);
 
-
 	// initialize and build out our frame buffer on the heap
 	job->frameBuffer = (uint8_t *)av_malloc(job->frameBufferSize * sizeof(uint8_t));
 
@@ -108,9 +107,18 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 
 static void OutputClose(Output * job) {
 
-	return;
 	// write the trailer as needed
 	av_write_trailer(job->context);
+
+	// now make sure we can safely close the file
+	if (!(job->context->oformat->flags & AVFMT_NOFILE)) {
+
+		printf("%s", "tset");
+
+		avio_close(job->context->pb);
+	}
+
+	return;
 	
 	// write any headers needed
 	// remove the packet if it exists
@@ -123,9 +131,6 @@ static void OutputClose(Output * job) {
 	avcodec_close(job->audioCodecContext);
 	avcodec_close(job->videoCodecContext);
 
-	// now make sure we can safely close the file
-	if (!(job->context->oformat->flags & AVFMT_NOFILE))
-		avio_close(job->context->pb);
 
 	// nowclose the avf
 	// now close the various codec contexts
@@ -146,33 +151,32 @@ static void packetHandler(Input * input, Output * job) {
 	// now lets ensure that we have the correct size for the input buffer
 	// resize the input buffer here
 	// also assume that the input buffer is cleared out
-	if (input->bufferSize < input->packet->size) {
-
-		// reset the buffersize to be the correct packet size
-		input->bufferSize = input->packet->size;
-		// now reallocate any memory that was here previously
-		input->buffer = (uint8_t *)realloc(input->buffer, input->bufferSize * sizeof(uint8_t));
-		
-	}
-	
 	// print out the dts element etc
 	if (input->packet->stream_index == AVMEDIA_TYPE_VIDEO) {
 
-		// decode the audio stream into a raw packet
+		// decode the video->packet into the video->frame
 		decode.decodeVideo(input);
 
-		// now output video properly with the correct encoding elements
-		write.writeVideoFrame(input, job);
+		// continue because we didn't get a full frame
+		if (input->gotFrame) {
+
+			// now output video properly with the correct encoding elements
+			write.writeVideoFrame(input, job);
+		}
 	}
 
 	// now lets take the packet stream index element 
 	else if (input->packet->stream_index == AVMEDIA_TYPE_AUDIO) {
-	
-		// decode the audio into a raw method
+
+		// decode the input->packet into the input->frame
 		decode.decodeAudio(input);
 
-		// now lets call the correct output audio function
-		write.writeAudioFrame(input, job);	
+		// make sure that we got a frame from the packet
+		if (input->gotFrame) {
+
+			// now lets call the correct output audio function
+			write.writeAudioFrame(input, job);	
+		}
 	}
 }
 

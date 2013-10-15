@@ -132,11 +132,14 @@ Input * InputInit(const char * inputPath) {
 	input->frame = avcodec_alloc_frame();
 
 	// now lets get the number of bytes needed for this application
-	input->bufferSize= avpicture_get_size(input->videoCodecContext->pix_fmt, input->videoCodecContext->width, input->videoCodecContext->height);
+	input->frameBufferSize= avpicture_get_size(input->videoCodecContext->pix_fmt, input->videoCodecContext->width, input->videoCodecContext->height);
 
 	// now lets get the correct sample size
 	// now lets initialize this area in memory
-	input->buffer = (uint8_t *)malloc(input->bufferSize * sizeof(uint8_t));
+	input->frameBuffer = (uint8_t *)malloc(input->frameBufferSize * sizeof(uint8_t));
+
+	// now fill the original image
+	avpicture_fill((AVPicture *)input->frame, input->frameBuffer, input->videoCodecContext->pix_fmt, input->videoCodecContext->width, input->videoCodecContext->height);
 		
 	return input;
 }
@@ -152,7 +155,7 @@ static void InputClose(Input * input) {
 	/*if (input->frame) avcodec_free_frame(input->frame);*/
 
 	// clear out the input buffer
-	free(input->buffer);
+	free(input->frameBuffer);
 
 	// close out the codec contexts
 	avcodec_close(input->audioCodecContext);

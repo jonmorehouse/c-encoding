@@ -22,9 +22,6 @@ struct EncodingJob {
 	char * outputPath;
 	char * outputFormat;
 
-	// high level codec information
-	int codecId;
-
 	// initialize lower level video elements
 	int videoBitrate;
 	int height;
