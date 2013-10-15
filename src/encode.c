@@ -33,6 +33,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	// now read the entire input file in a while loop!
 	while(av_read_frame(input->context, input->packet) >= 0) {
 
+		break;
 		// handle the encoding elements etc
 		output.packetHandler(input, job);
 	
@@ -41,22 +42,9 @@ static void encodeVideo(EncodingJob * encodingJob) {
 		av_free_packet(input->packet);
 	}
 
-	// now write the ending to the file
-	/*av_write_trailer(currentOutput->context);*/
-
-	// now close the context
-	/*avio_close(currentOutput->context->pb);*/
-
-	// now free the final frames
-	//avcodec_free_frame(&encodeFrame);
-	//avcodec_free_frame(&decodedFrame);
-
-	// now free the context
-	//avformat_free_context(outputContext);
-
-	// and finally close the input file
-	/*av_close_input_file(inputContext);*/
-
+	// close both input and output
+	/*output.OutputClose(output);*/
+	decode.InputClose(input);
 
 }
 

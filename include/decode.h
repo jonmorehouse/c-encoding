@@ -54,6 +54,9 @@ typedef struct {
 	// responsible for creating a full input with everything needed
 	Input * (* const InputInit)(const char *);
 
+	// close out input as needed
+	void (* const InputClose)(Input *);
+
 } decode_namespace;
 
 // declare a structure variable that can be accessed from exterior calling functions

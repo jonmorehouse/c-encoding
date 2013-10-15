@@ -144,6 +144,32 @@ Input * InputInit(const char * inputPath) {
 	return input;
 }
 
+static void InputClose(Input * input) {
+
+	// if there is a packet close it
+	if (input->packet) av_free_packet(input->packet);
+	
+	// check to see if the frame was actually allocated
+	// this is throwing an no-memory error
+	// I think I am clearing the frame in the packet handler
+	/*if (input->frame) avcodec_free_frame(input->frame);*/
+
+	// clear out the input buffer
+	free(input->buffer);
+
+	// close out the codec contexts
+	avcodec_close(input->audioCodecContext);
+	avcodec_close(input->videoCodecContext);
+	
+	// now free the memory that was allocated there
+	// this is not needed either
+	/*av_free(input->audioCodecContext);*/
+	/*av_free(input->videoCodecContext);*/
+	
+	// close our input file
+	av_close_input_file(input->context);
+}
+
 // initialize our constant decode struct for exporting etc
 decode_namespace const decode = {
 	
@@ -155,7 +181,7 @@ decode_namespace const decode = {
 	.decodeVideo = decodeVideo,
 
 	.InputInit = InputInit,
-
+	.InputClose = InputClose,
 
 };
 
