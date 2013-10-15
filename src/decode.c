@@ -33,7 +33,7 @@ static AVFormatContext * getFormatContext(const char * inputPath) {
 // responsible for taking the decoded packet and placing it into the raw data buffer for easy encoding and output
 static void decodeVideo(Input * input) {
 
-	
+	// the packet should be of a different size	
 
 
 
@@ -90,9 +90,6 @@ Input * InputInit(const char * inputPath) {
 
 	// allocate a frame and a raw data buffer
 	input->frame = avcodec_alloc_frame();
-
-	// we shouldn't have to do anything with the packet allocation because we are loading this in the while loop?
-	// come back to this
 
 	// now lets get the number of bytes needed for this application
 	input->bufferSize= avpicture_get_size(input->videoCodecContext->pix_fmt, input->videoCodecContext->width, input->videoCodecContext->height);

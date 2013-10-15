@@ -127,23 +127,33 @@ static void writeVideoFrame(AVPacket * packet, Output * job) {
  */
 static void packetHandler(Input * input, Output * job) {
 
+	// now lets ensure that we have the correct size for the input buffer
+	// resize the input buffer here
+	// also assume that the input buffer is cleared out
+	if (input->bufferSize < input->packet->size) {
+
+		input->bufferSize = input->packet->size;
+		input->buffer = (uint8_t *)realloc(input->buffer, input->bufferSize * sizeof(uint8_t));
+	}
 	
 	// print out the dts element etc
 	if (input->packet->stream_index == AVMEDIA_TYPE_VIDEO) {
 
 		// decode the audio stream into a raw packet
-	
+		decode.decodeVideo(input);
+
 		// now output video properly with the correct encoding elements
-		writeVideoFrame(input->packet, job);
+		/*writeVideoFrame(input->packet, job);*/
 	}
 
 	// now lets take the packet stream index element 
 	else if (input->packet->stream_index == AVMEDIA_TYPE_AUDIO) {
 	
 		// decode the audio into a raw method
+		decode.decodeAudio(input);
 
 		// now lets call the correct output audio function
-		writeAudioFrame(input->packet, job);	
+		/*writeAudioFrame(input->packet, job);	*/
 	}
 
 }

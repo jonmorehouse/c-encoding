@@ -25,8 +25,11 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 	// initialize the output element
 	Output * job = output.OutputInit(encodingJob);
-	
-	return;
+
+	// initialize a packet on the stack for quicker reference
+	AVPacket packet;
+	input->packet = &packet;
+
 	// now read the entire input file in a while loop!
 	while(av_read_frame(input->context, input->packet) >= 0) {
 

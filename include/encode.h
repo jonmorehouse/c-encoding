@@ -4,7 +4,6 @@
 // now include project files
 #include "common.h"
 #include "output.h"
-#include "decode.h"
 
 // now link up to the proper libraries needed 
 #include <libavformat/avformat.h>
