@@ -59,8 +59,8 @@ int main(int argc, char * argv[]) {
 		.width = 400, 
 
 		.fps = {
-			.num = 29970,
-			.den = 1000,
+			.den = 25,
+			.num = 1,
 		},
 
 		.gop_size = 12,

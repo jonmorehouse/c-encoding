@@ -25,41 +25,6 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
 	return output;
 }
 
-void test(AVFormatContext * context) {
-	
-	AVCodec * codec;
-	AVCodecContext * c;
-	AVStream * st;
-
-	av_register_all();
-
-	codec = avcodec_find_encoder(context->oformat->video_codec);
-
-	st = avformat_new_stream(context, codec);	
-
-	c = st->codec;
-
-	avcodec_get_context_defaults3(c, codec);
-
-	// now lets see if there is an issue with our codec!
-	c = avcodec_alloc_context3(codec);
-
-	int returnval;
-
-	returnval = avcodec_open2(c, codec, NULL);
-
-	printf("%i" "\n", returnval);
-
-	fprintf("%s", av_err2str(returnval));
-
-	printf("%p" "\n", c->codec);
-	printf("%p" "\n", codec);
-
-
-
-	avcodec_open2(c, codec, NULL);
-}
-
 /*
  * Initialize output struct for managing the various segments etc
  *
@@ -77,22 +42,21 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 
 	/* Create output streams as needed. Link them up with codec and create the correct codecs */			
 
-	test(job->context);
-	return;
 	// now generate the audio / video codec as needed
 	// this will open the codec
-	/*codec.createAudioCodec(job, encodingJob);*/
+	codec.createAudioCodec(job, encodingJob);
 
 	// create the video output codec
 	// this will open codec and do a few things to the stream
-	/*codec.createVideoCodec(job, encodingJob);*/
+	codec.createVideoCodec(job, encodingJob);
 
 	// now lets open both codecs 
 	// open audio codec
-	/*codec.openCodec(job, AVMEDIA_TYPE_AUDIO);*/
+	codec.openCodec(job, AVMEDIA_TYPE_AUDIO);
+
 
 	// open video codec
-	/*codec.openCodec(job, AVMEDIA_TYPE_VIDEO);*/
+	codec.openCodec(job, AVMEDIA_TYPE_VIDEO);
 
 	/* Create bitstream filters */
 	/*bitstream_filter.initBitStreamFilters(job);*/

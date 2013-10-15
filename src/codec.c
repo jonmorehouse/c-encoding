@@ -55,7 +55,6 @@ int selectChannelLayout(AVCodec * codec) {
 
 			// best number of channels etc
 			bestNumberChannels = numberChannels;
-
 		}
 
 		// now increase the iterator
@@ -79,30 +78,24 @@ void openCodec(Output * job, enum AVMedia_Type * type) {
 	// now use some audio/video logic to generate the correct streams etc 
 	if (type == AVMEDIA_TYPE_AUDIO) {
 
-		printf("%s", "audio\n");
 		stream = job->audioStream;
 		codec = job->audioCodec;
 
 	} else {
 
-		printf("%s", "video\n");
 		stream = job->videoStream;
 		codec = job->videoCodec;
 	}
 
 	// now ensure that we have a valid stream initialized 
-	/*printf("%s", codec->name);*/
-	printf("%s", stream->codec->codec_name);
-
 	// now lets grab the correct codec context
 	// http://ffmpeg.org/doxygen/trunk/structAVCodecContext.html
-	/*codecContext = stream->codec;*/
+	codecContext = stream->codec;
 
 	// now we need to open our video
-	/*codecStatus = avcodec_open2(codecContext, codec, NULL); 	*/
+	codecStatus = avcodec_open2(codecContext, codec, NULL); 	
 
-	// now lets print out the result
-
+	if (codecStatus < 0) printf("%s" "\n", av_err2str(codecStatus));
 }
 
 
@@ -142,11 +135,8 @@ static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
 	// this could be easier, but we want to make sure that if we were to call this later / earlier we would still be good
 	(*stream)->id = job->context->nb_streams - 1;
 
-
 	// now link up the stream codec to the output codec
 	*codecContext = (*stream)->codec;
-
-	printf("%p" "\n", codecContext); 
 
 	// now initialize the actual codec elements etc
 	(*stream)->id = 1;	
@@ -212,6 +202,9 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// now copy over any attributes needed etc
 	(*codecContext)->bit_rate = encodingJob->videoBitrate;
 
+	// fixed this issue without any major hickups
+	/*(*codecContext)->bit_rate_tolerance = 8000;*/
+
 	// now copy over the various trivial assets / figures over
 	(*codecContext)->width = encodingJob->width;
 	(*codecContext)->height = encodingJob->height;
@@ -222,7 +215,7 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// now initialize frame rate elements
 	// note that for fixed frame rate video time_base = fps/1
 	(*codecContext)->time_base.num = encodingJob->fps.num;
-	(*codecContext)->time_base.num = encodingJob->fps.den;
+	(*codecContext)->time_base.den = encodingJob->fps.den;
 
 	// initialize gop_size 
 	(*codecContext)->gop_size = encodingJob->gop_size;
@@ -242,7 +235,6 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// now initialize the stream  headers if necessary
 	if (job->format->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
-
 
 }
 
