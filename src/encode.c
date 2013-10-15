@@ -24,7 +24,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	Input * input = decode.InputInit(encodingJob->inputPath);
 
 	// initialize the output element
-	Output * job = output.OutputInit(encodingJob);
+	Output * job = output.OutputInit(encodingJob, input);
 
 	// initialize a packet on the stack for quicker reference
 	AVPacket packet;

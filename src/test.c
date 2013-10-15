@@ -31,7 +31,7 @@ void testEncoding(EncodingJob * encodingJob) {
 
 void testOutput(EncodingJob * encodingJob) {
 	
-	Output * outputJob = output.OutputInit(encodingJob);
+	 /*Output * outputJob = output.OutputInit(encodingJob);*/
 
 }
 

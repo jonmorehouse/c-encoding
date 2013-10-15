@@ -29,7 +29,7 @@ static AVFormatContext * createFormatContext(char * outputPath, char * format) {
  * Initialize output struct for managing the various segments etc
  *
  */
-static Output * OutputInit(const EncodingJob * encodingJob) {
+static Output * OutputInit(const EncodingJob * encodingJob, const Input * input) {
 	
 	// initialize an output structure on the heap 
 	Output * job = malloc(sizeof(Output));
@@ -61,7 +61,8 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	codec.openCodec(job, AVMEDIA_TYPE_VIDEO);
 
 	// now that we have opened out codecs etc we need to write the correct headers
-	av_dump_format(job->context, 0, encodingJob->outputPath, 1);
+	/*av_dump_format(job->context, 0, encodingJob->outputPath, 1);*/
+	printf("%s", "test\n");
 
 	// open the output file if necessary
 	if (!(job->format->flags & AVFMT_NOFILE)) {
@@ -75,6 +76,13 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 		
 		// handle errors nicely in this block
 	}
+
+	// initailize the resize context using the input / output parameters
+	// http://stackoverflow.com/questions/12831761/how-to-resize-a-picture-using-ffmpegs-sws-scale
+	job->resizeContext = sws_getContext(input->videoCodecContext->width, input->videoCodecContext->height, 
+			input->videoCodecContext->pix_fmt, job->videoCodecContext->width, 
+			job->videoCodecContext->height, job->videoCodecContext->pix_fmt,
+			SWS_BICUBIC, NULL, NULL, NULL);
 
 	// return the new output pointer
 	return job;

@@ -16,6 +16,7 @@
 #include <libswscale/swscale.h>
 #include <libavutil/opt.h>
 #include <libswscale/swscale.h>
+//#include <libswscale/swscale_internal.h>
 #include <libavutil/imgutils.h>
 
 // encapsulate all of the information needed to output to a format etc
@@ -38,10 +39,13 @@ struct Output{
 	AVStream * videoStream;
 
 	// initialize bitstream filter context 
+	// filter contexts etc
 	AVBitStreamFilterContext * bitStreamFilterContext;
+	struct SwsContext * resizeContext;
 
-	char * test;
-
+	// initialize output packet and frame for actual creation fo the output streams and frames etc
+	AVFrame * frame;
+	AVPacket * packet;
 };
 
 // declare a structure type that is responsible for holding all the elements needed
@@ -51,7 +55,7 @@ typedef struct {
 	AVFormatContext * (* const createFormatContext)(const char *, const char *);
 
 	// create a valid output from an encoding job input etc
-	Output * (* const OutputInit)(EncodingJob *);
+	Output * (* const OutputInit)(const EncodingJob *, const Input *);
 
 	// writing to output elements
 	void (* const writeVideoFrame)(AVPacket *, Output *);
