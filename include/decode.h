@@ -21,6 +21,9 @@ struct Input {
 	// this is guessed based upon the size of the input picture
 	int bufferSize;
 
+	// whether or not we got a frame
+	int gotFrame;
+
 	// now create a place to store this input buffered data
 	// this should be rotated between audio/video for best performance
 	uint8_t * buffer;

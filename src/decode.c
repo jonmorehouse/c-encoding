@@ -17,7 +17,6 @@ static AVFormatContext * getFormatContext(const char * inputPath) {
 	if (avformat_open_input(&context, inputPath, NULL, NULL) < 0) {
 		
 		// handle errors elegantly here!
-
 	}
 
 	// now lets make sure that there are actually streams in this context
@@ -34,24 +33,31 @@ static AVFormatContext * getFormatContext(const char * inputPath) {
 static void decodeVideo(Input * input) {
 
 	// decode result
-	int decodeResult, gotFrame;
+	int decodeResult;
 
 	// initialize the input frame
 	if (!input->frame) input->frame = avcodec_alloc_frame();
 
 	// initialize decodedResult 
-	decodeResult = avcodec_decode_video2(input->videoCodecContext, input->frame, &gotFrame, input->packet);
+	decodeResult = avcodec_decode_video2(input->videoCodecContext, input->frame, &input->gotFrame, input->packet);
 
 	// initialize decoded result
 	if (decodeResult < 0) ;
 
+	// initialize the input frame 
+	if (input->gotFrame) {
+	
 
+	} else {
+
+
+	}
 }
 
 static void decodeAudio(Input * input) {
 
 	// initialize helper variables for use here
-	int decodeResult, gotFrame;
+	int decodeResult;
 	
 	// the packet should be of a different size	
 	// now lets ensure that we have a frame for this 
@@ -61,14 +67,14 @@ static void decodeAudio(Input * input) {
 	else avcodec_get_frame_defaults(input->frame);
 
 	// now decode the audio from the packet into the frame
-	decodeResult = avcodec_decode_audio4(input->audioCodecContext, input->frame, &gotFrame, input->packet);
+	decodeResult = avcodec_decode_audio4(input->audioCodecContext, input->frame, &input->gotFrame, input->packet);
 
 	// initialize the packet
 	if (decodeResult < 0) ;//handle the error with elegance
 
 	// check to see if we grabbed the frame properly
 	// http://ffmpeg.org/doxygen/trunk/doc_2examples_2decoding_encoding_8c-example.html
-	if (gotFrame) {
+	if (input->gotFrame) {
 	
 
 	} else {
