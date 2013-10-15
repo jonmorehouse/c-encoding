@@ -1,0 +1,1 @@
+alias count='cloc --exclude-dir=obj,fixtures .'
