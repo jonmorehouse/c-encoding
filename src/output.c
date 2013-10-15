@@ -83,6 +83,8 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 			job->videoCodecContext->height, job->videoCodecContext->pix_fmt,
 			SWS_BICUBIC, NULL, NULL, NULL);
 
+	if (!job->resizeContext) ;//handle errors here
+
 	// return the new output pointer
 	return job;
 }
