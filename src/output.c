@@ -97,25 +97,29 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 
 static void OutputClose(Output * job) {
 
+	// write the trailer as needed
+	av_write_trailer(job->context);
+	
 	// write any headers needed
 	// remove the packet if it exists
 	if (job->packet) av_free_packet(job->packet);
 
 	// now lets see if the frame exists and clear that if necessary
-	if (job->frame) avcodec_free_frame(job->frame);
+	/*if (job->frame) avcodec_free_frame(job->frame);*/
 	
 	// deallocate memory as needed
 	avcodec_close(job->audioCodecContext);
 	avcodec_close(job->videoCodecContext);
 
-	// write the trailer as needed
-	av_write_trailer(job->context);
+	// now make sure we can safely close the file
+	if (!(job->context->oformat->flags & AVFMT_NOFILE))
+		avio_close(job->context->pb);
 
+	// nowclose the avf
 	// now close the various codec contexts
-
+	avformat_free_context(job->context);
 
 }
-
 
 /*
  * Packet handler is responsible for taking in an output context and then a packet and then doing magical shit!!
