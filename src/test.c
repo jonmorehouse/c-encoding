@@ -15,8 +15,6 @@
 #include <libavutil/imgutils.h>
 #include <stdio.h>
 
-
-
 void testGetFormatFromPath() {
 
 	const char * inputPath = "test.mov";

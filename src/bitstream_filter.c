@@ -6,7 +6,6 @@ static void initBitStreamFilters(Output * job) {
 	
 	// cache filter name
 	const char * filterName = "h264_mp4toannexb";
-	/*const char * filterName = "mjpeg2jpeg";*/
 
 	// now cache the results of the previous call in the job
 	AVBitStreamFilterContext * bsfc = av_bitstream_filter_init(filterName); 
@@ -49,8 +48,9 @@ static void filter(AVPacket ** inputPacket, Output * job, enum AVMediaType type)
 
 		// now switch over the filter context
 		filterContext = filterContext->next;
-	}
 
+		printf("%i" "\n", newPacket.size);
+	}
 
 }
 

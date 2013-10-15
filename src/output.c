@@ -50,22 +50,35 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
 	// this will open codec and do a few things to the stream
 	codec.createVideoCodec(job, encodingJob);
 
+	/* Create bitstream filters */
+	bitstream_filter.initBitStreamFilters(job);
+
 	// now lets open both codecs 
 	// open audio codec
 	codec.openCodec(job, AVMEDIA_TYPE_AUDIO);
 
-
 	// open video codec
 	codec.openCodec(job, AVMEDIA_TYPE_VIDEO);
 
-	/* Create bitstream filters */
-	/*bitstream_filter.initBitStreamFilters(job);*/
-	
+	// now that we have opened out codecs etc we need to write the correct headers
+	av_dump_format(job->context, 0, encodingJob->outputPath, 1);
+
+	// open the output file if necessary
+	if (!(job->format->flags & AVFMT_NOFILE)) {
+
+		if (avio_open(&job->context->pb, encodingJob->outputPath, AVIO_FLAG_WRITE) < 0 )
+			printf("%s""\n", "Could not open filename"); 
+	}
+
+	// now write the correc headers to this file as needed
+	if (avformat_write_header(job->context, NULL) < 0) {
+		
+		// handle errors nicely in this block
+	}
+
 	// return the new output pointer
 	return job;
 }
-
-
 
 /*
  * Write audio data to the current element
@@ -89,7 +102,10 @@ static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
 static void writeVideoFrame(AVPacket * packet, Output * job) {
 	
 	// first we need to filter the packet and see if that works!!
-	bitstream_filter.filter(&packet, job, AVMEDIA_TYPE_VIDEO);
+	/*bitstream_filter.filter(&packet, job, AVMEDIA_TYPE_VIDEO);*/
+
+	// 
+
 }
 
 
