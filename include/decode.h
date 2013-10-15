@@ -12,13 +12,28 @@
 // initialize the type structure
 struct Input {
 
+	// initialize general elements
 	AVFormatContext * context;
 	AVFrame * frame;
-	AVCodec * audioCodec;
-	AVCodec * videoCodec;
-	AVCodecContext * audioCodecContext;
-	AVCodecContext * videoCodecContext;
 	AVPacket * packet;
+
+	// number of bytes we are permitting for this application
+	// this is guessed based upon the size of the input picture
+	int bufferSize;
+
+	// now create a place to store this input buffered data
+	// this should be rotated between audio/video for best performance
+	uint8_t * buffer;
+
+	// initialize audio elements
+	AVCodec * audioCodec;
+	AVStream * audioStream;
+	AVCodecContext * audioCodecContext;
+
+	// initialize video elements
+	AVCodec * videoCodec;
+	AVStream * videoStream;
+	AVCodecContext * videoCodecContext;
 
 }; 
 
@@ -27,10 +42,6 @@ typedef struct {
 
 	// create an element to get the formatContext from the input filePath
 	AVFormatContext * (* const getFormatContext)(const char *);
-
-	// create a simple decode element
-	// in the future, this should take in callback function so that we can pass the individual frame into each one
-	void (* const fromPath)(const char *);
 
 	// now initialize decode video / audio functions
 	void (* const decodeAudio)(Input *);
