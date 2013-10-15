@@ -53,10 +53,20 @@ static void decodeAudio(Input * input) {
 	else avcodec_get_frame_defaults(input->frame);
 
 	// now decode the audio from the packet into the frame
-	/*decodeResult = avcodec_decode_audio4(input->audioCodecContext, input->frame, &gotFrame, input->packet);*/
+	decodeResult = avcodec_decode_audio4(input->audioCodecContext, input->frame, &gotFrame, input->packet);
 
-	/*if (decodeResult > 0) printf("%s", "bad");*/
+	// initialize the packet
+	if (decodeResult < 0) ;//handle the error with elegance
 
+	// check to see if we grabbed the frame properly
+	// http://ffmpeg.org/doxygen/trunk/doc_2examples_2decoding_encoding_8c-example.html
+	if (gotFrame) {
+	
+
+	} else {
+		
+
+	}
 }
 
 Input * InputInit(const char * inputPath) {
@@ -74,7 +84,7 @@ Input * InputInit(const char * inputPath) {
 	
 		// discover what type of stream this is
 		if (input->context->streams[iterator]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
-			
+
 			// now initialize the stream elements
 			input->audioStream = input->context->streams[iterator];
 			input->audioCodecContext = input->audioStream->codec;
@@ -104,8 +114,6 @@ Input * InputInit(const char * inputPath) {
 
 			// now open the codec context
 			if (avcodec_open2(input->videoCodecContext, input->videoCodec, NULL) < 0) ;// handle errors here
-
-
 		}
 	}
 
