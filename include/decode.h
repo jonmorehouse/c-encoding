@@ -37,7 +37,6 @@ struct Input {
 	AVCodec * videoCodec;
 	AVStream * videoStream;
 	AVCodecContext * videoCodecContext;
-
 }; 
 
 // declare a structure to export all of the functions that we are declaring in this namespace etc
