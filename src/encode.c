@@ -20,29 +20,28 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	
 	// this is going to open the input file and give us a handle to grab the streams etc that we want from it
 	// you don't need a decoder -- the whole point of the format context is that it does all of this for you. Allowing you to read packets which give you pieces of the stream!
-	AVFormatContext * inputContext = decode.getFormatContext(encodingJob->inputPath);
-
-	// initialize a packet for registering element
-	AVPacket decodedPacket;
+	/*AVFormatContext * inputContext = decode.getFormatContext(encodingJob->inputPath);*/
+	Input * input = decode.InputInit(encodingJob->inputPath);
 
 	// initialize the output element
-	Output * currentOutput = output.OutputInit(encodingJob);
+	Output * job = output.OutputInit(encodingJob);
 	
 	// now read the entire input file in a while loop!
-	while(av_read_frame(inputContext, &decodedPacket) >= 0) {
-	
-		// handle the encoding elements etc
-		output.packetHandler(&decodedPacket, currentOutput);
+	while(av_read_frame(input->context, input->packet) >= 0) {
 
+		// handle the encoding elements etc
+		output.packetHandler(input, job);
+	
+		// we will decode the packet in the proper places in the output function
+		// keep this method as light as possible!
+		av_free_packet(input->packet);
 	}
 
-
-	/*
 	// now write the ending to the file
-	av_write_trailer(outputContext);
+	/*av_write_trailer(currentOutput->context);*/
 
 	// now close the context
-	avio_close(outputContext->pb);
+	/*avio_close(currentOutput->context->pb);*/
 
 	// now free the final frames
 	//avcodec_free_frame(&encodeFrame);
@@ -52,9 +51,9 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	//avformat_free_context(outputContext);
 
 	// and finally close the input file
-	av_close_input_file(inputContext);
+	/*av_close_input_file(inputContext);*/
 
-*/
+
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header

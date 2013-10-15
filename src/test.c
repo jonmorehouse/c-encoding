@@ -21,7 +21,6 @@ void testGetFormatFromPath() {
 	const char * format;
 
 	format = utilities.getFormatFromPath(inputPath);
-
 }
 
 // run through and encode a job

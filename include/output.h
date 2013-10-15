@@ -6,6 +6,8 @@
 #include "codec.h"
 #include "encode.h"
 #include "bitstream_filter.h"
+#include "write.h"
+#include "decode.h"
 
 // now link up to the proper libraries needed 
 #include <libavformat/avformat.h>
@@ -54,7 +56,7 @@ typedef struct {
 	// writing to output elements
 	void (* const writeVideoFrame)(AVPacket *, Output *);
 	void (* const  writeAudioFrame)(AVPacket *, Output *);
-	void (* const packetHandler)(AVPacket *, Output *)
+	void (* const packetHandler)(Input *, Output *)
 
 } output_namespace;
 

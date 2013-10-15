@@ -31,8 +31,8 @@ static void filter(AVPacket ** inputPacket, Output * job, enum AVMediaType type)
 	AVCodecContext * codecContext = NULL;// need to cache which codec context we are filtering for
 
 	// initialize our codecContext element
-	if (type == AVMEDIA_TYPE_AUDIO) codecContext = job->audioCodecContext;
-	else codecContext = job->videoCodecContext;
+	if (type == AVMEDIA_TYPE_AUDIO) codecContext = job->audioStream->codec;
+	else codecContext = job->videoStream->codec;
 	
 	while (filterContext) {
 
@@ -49,7 +49,7 @@ static void filter(AVPacket ** inputPacket, Output * job, enum AVMediaType type)
 		// now switch over the filter context
 		filterContext = filterContext->next;
 
-		printf("%i" "\n", newPacket.size);
+		printf("%i", filterResult);
 	}
 
 }

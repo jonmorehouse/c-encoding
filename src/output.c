@@ -87,7 +87,7 @@ static Output * OutputInit(const EncodingJob * encodingJob) {
  */
 static void writeAudioFrame(AVPacket * packet, AVFormatContext * output) {
 
-
+	
 }
 
 
@@ -103,8 +103,16 @@ static void writeVideoFrame(AVPacket * packet, Output * job) {
 	
 	// first we need to filter the packet and see if that works!!
 	/*bitstream_filter.filter(&packet, job, AVMEDIA_TYPE_VIDEO);*/
+	int ret;
+	static struct SwsContext * sws_ctx;
+	AVCodecContext * c = job->videoStream->codec;
+	
+	/*printf("size: " "%i" "\n", packet->size);*/
+	/*printf("dts: " "%i" "\n", packet->dts);*/
+	/*printf("pts: " "%i" "\n", packet->pts);*/
 
-	// 
+	ret = av_interleaved_write_frame(job->context, packet);
+	printf("return: " "%i" "\n", ret);
 
 }
 
@@ -117,24 +125,30 @@ static void writeVideoFrame(AVPacket * packet, Output * job) {
  * 3.) send the packet to the correct function audio/video etc
  *
  */
-static void packetHandler(AVPacket * packet, Output * job) {
+static void packetHandler(Input * input, Output * job) {
 
 	
 	// print out the dts element etc
-	if (packet->stream_index == AVMEDIA_TYPE_VIDEO) {
+	if (input->packet->stream_index == AVMEDIA_TYPE_VIDEO) {
+
+		// decode the audio stream into a raw packet
 	
 		// now output video properly with the correct encoding elements
-		writeVideoFrame(packet, job);
+		writeVideoFrame(input->packet, job);
 	}
 
 	// now lets take the packet stream index element 
-	else if (packet->stream_index == AVMEDIA_TYPE_AUDIO) {
+	else if (input->packet->stream_index == AVMEDIA_TYPE_AUDIO) {
+	
+		// decode the audio into a raw method
 
 		// now lets call the correct output audio function
-		writeAudioFrame(packet, job);	
+		writeAudioFrame(input->packet, job);	
 	}
+
 }
 
+// output element
 output_namespace const output = {
 
 	// create output format context
