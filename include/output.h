@@ -56,6 +56,9 @@ typedef struct {
 
 	// create a valid output from an encoding job input etc
 	Output * (* const OutputInit)(const EncodingJob *, const Input *);
+	
+	// close out the input as needed - write any headers necessary and deallocate the memory as needed
+	void (* const OutputClose)(Output *);
 
 	// writing to output elements
 	void (* const packetHandler)(Input *, Output *)

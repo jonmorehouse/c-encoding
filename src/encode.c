@@ -42,7 +42,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	}
 
 	// close both input and output
-	/*output.OutputClose(output);*/
+	output.OutputClose(job);
 	decode.InputClose(input);
 }
 

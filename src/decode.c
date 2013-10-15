@@ -4,9 +4,6 @@
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
 
-// include temp development dependencies
-#include <stdio.h>
-
 // initialize getFormatContext element
 static AVFormatContext * getFormatContext(const char * inputPath) {
 	

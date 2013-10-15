@@ -1,7 +1,5 @@
 #include "output.h"
 
-#include <stdio.h>
-
 /*
  * Create a valid output context given a file name
  * 
@@ -83,11 +81,41 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 			job->videoCodecContext->height, job->videoCodecContext->pix_fmt,
 			SWS_BICUBIC, NULL, NULL, NULL);
 
+
+	// check to ensure that we created the job resizing context correctly
 	if (!job->resizeContext) ;//handle errors here
 
+	// now we need to create a frame for allocating the elemnets into
+	job->frame = avcodec_alloc_frame();
+
+	// ensure that we crate the frame needed successfully
+	if (!job->frame) ;// handle errors here with elegance
+	
 	// return the new output pointer
 	return job;
 }
+
+static void OutputClose(Output * job) {
+
+	// write any headers needed
+	// remove the packet if it exists
+	if (job->packet) av_free_packet(job->packet);
+
+	// now lets see if the frame exists and clear that if necessary
+	if (job->frame) avcodec_free_frame(job->frame);
+	
+	// deallocate memory as needed
+	avcodec_close(job->audioCodecContext);
+	avcodec_close(job->videoCodecContext);
+
+	// write the trailer as needed
+	av_write_trailer(job->context);
+
+	// now close the various codec contexts
+
+
+}
+
 
 /*
  * Packet handler is responsible for taking in an output context and then a packet and then doing magical shit!!
@@ -137,7 +165,10 @@ output_namespace const output = {
 
 	// create output format context
 	.createFormatContext = createFormatContext,
+
+	// allocation / deallocation of dynamic output struct
 	.OutputInit = OutputInit,
+	.OutputClose = OutputClose,
 	
 	// create a packet handler
 	.packetHandler = packetHandler, 
