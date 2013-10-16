@@ -107,13 +107,17 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 
 static void OutputClose(Output * job) {
 
+	/*printf("%i", job->videoCodecContext->);*/
+
+	return;
+
+
+
 	// write the trailer as needed
 	av_write_trailer(job->context);
-
+	
 	// now make sure we can safely close the file
 	if (!(job->context->oformat->flags & AVFMT_NOFILE)) {
-
-		printf("%s", "tset");
 
 		avio_close(job->context->pb);
 	}
@@ -130,7 +134,6 @@ static void OutputClose(Output * job) {
 	// deallocate memory as needed
 	avcodec_close(job->audioCodecContext);
 	avcodec_close(job->videoCodecContext);
-
 
 	// nowclose the avf
 	// now close the various codec contexts

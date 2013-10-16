@@ -43,7 +43,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 
 	// close both input and output
 	output.OutputClose(job);
-	decode.InputClose(input);
+	/*decode.InputClose(input);*/
 }
 
 // now implement the namespace struct that was initialized as an external variable in previous header
