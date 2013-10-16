@@ -41,7 +41,6 @@ static void writeVideoFrame(Input * input, Output * job) {
 		// now write the interlaved ppacket
 		result = av_interleaved_write_frame(job->context, &packet);
 
-
 	} else {
 	
 		printf("%s" "\n", "skip");

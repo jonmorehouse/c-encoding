@@ -61,11 +61,14 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 	// now that we have opened out codecs etc we need to write the correct headers
 	/*av_dump_format(job->context, 0, encodingJob->outputPath, 1);*/
 
+	int status;
+
 	// open the output file if necessary
 	if (!(job->format->flags & AVFMT_NOFILE)) {
 
-		if (avio_open(&job->context->pb, encodingJob->outputPath, AVIO_FLAG_WRITE) < 0 )
-			printf("%s""\n", "Could not open filename"); 
+		status = avio_open(&job->context->pb, encodingJob->outputPath, AVIO_FLAG_WRITE);
+
+		if (status != 0) ;// unable to open the context, things aren't working correctly
 	}
 
 	// now write the correc headers to this file as needed
@@ -80,7 +83,6 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 			input->videoCodecContext->pix_fmt, job->videoCodecContext->width, 
 			job->videoCodecContext->height, job->videoCodecContext->pix_fmt,
 			SWS_BICUBIC, NULL, NULL, NULL);
-
 
 	// check to ensure that we created the job resizing context correctly
 	if (!job->resizeContext) ;//handle errors here
@@ -107,23 +109,18 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 
 static void OutputClose(Output * job) {
 
-	/*printf("%i", job->videoCodecContext->);*/
-
-	return;
-
-
-
 	// write the trailer as needed
 	av_write_trailer(job->context);
 	
 	// now make sure we can safely close the file
 	if (!(job->context->oformat->flags & AVFMT_NOFILE)) {
 
+		printf("%s", "closing");
 		avio_close(job->context->pb);
 	}
 
 	return;
-	
+
 	// write any headers needed
 	// remove the packet if it exists
 	if (job->packet) av_free_packet(job->packet);

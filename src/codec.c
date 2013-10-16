@@ -70,7 +70,7 @@ void openCodec(Output * job, enum AVMedia_Type * type) {
 	// initialize some temp pointers for the necessary pieces of opening the video codec 
 	AVCodec * codec = NULL;
 	AVStream * stream = NULL;
-	AVCodecContext * codecContext;
+	AVCodecContext * codecContext = NULL;
 	
 	// check status of codec opening
 	int codecStatus;
@@ -91,13 +91,13 @@ void openCodec(Output * job, enum AVMedia_Type * type) {
 	// now lets grab the correct codec context
 	// http://ffmpeg.org/doxygen/trunk/structAVCodecContext.html
 	codecContext = stream->codec;
-
+	
 	// now we need to open our video
 	codecStatus = avcodec_open2(codecContext, codec, NULL); 	
 
+	// ensure that the codec is opened properly
 	if (codecStatus < 0) printf("%s" "\n", av_err2str(codecStatus));
 }
-
 
 // create an output audio codec from the context passed in and encoding job passed in
 static void createAudioCodec(Output * job, EncodingJob * encodingJob) {
@@ -177,7 +177,7 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	/*** Initialize Encoder ***/	
 
 	// make sure that we have a format codec linked up
-	if (job->format == AV_CODEC_ID_NONE) ;//handle errors here
+	if (codecID == AV_CODEC_ID_NONE) ;//handle errors here
 
 	// now build out the codec encoder
 	*codec = avcodec_find_encoder(codecID);
@@ -235,6 +235,7 @@ static void createVideoCodec(Output * job, EncodingJob * encodingJob) {
 	// now initialize the stream  headers if necessary
 	if (job->format->flags && AVFMT_GLOBALHEADER)
 		(*codecContext)->flags |= CODEC_FLAG_GLOBAL_HEADER;
+
 
 }
 
