@@ -39,11 +39,12 @@ static void writeVideoFrame(Input * input, Output * job) {
 		packet.stream_index = job->videoStream->index;
 
 		// now write the interlaved ppacket
-		result = av_interleaved_write_frame(job->context, &packet);
+		// should be 0 on success
+		result = av_write_frame(job->context, &packet);
+
 
 	} else {
-	
-		printf("%s" "\n", "skip");
+
 		result = 0;
 	}
 
@@ -52,9 +53,11 @@ static void writeVideoFrame(Input * input, Output * job) {
 		
 		// handle an error here	
 
+	} else {
+
+
 	}
 }
-
 
 write_namespace const write = {
 

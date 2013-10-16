@@ -115,12 +115,10 @@ static void OutputClose(Output * job) {
 	// now make sure we can safely close the file
 	if (!(job->context->oformat->flags & AVFMT_NOFILE)) {
 
-		printf("%s", "closing");
 		avio_close(job->context->pb);
 	}
 
 	return;
-
 	// write any headers needed
 	// remove the packet if it exists
 	if (job->packet) av_free_packet(job->packet);
@@ -168,6 +166,7 @@ static void packetHandler(Input * input, Output * job) {
 	// now lets take the packet stream index element 
 	else if (input->packet->stream_index == AVMEDIA_TYPE_AUDIO) {
 
+		/*
 		// decode the input->packet into the input->frame
 		decode.decodeAudio(input);
 
@@ -177,6 +176,7 @@ static void packetHandler(Input * input, Output * job) {
 			// now lets call the correct output audio function
 			write.writeAudioFrame(input, job);	
 		}
+		*/
 	}
 }
 

@@ -30,7 +30,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	AVPacket packet;
 	input->packet = &packet;
 
-	/*
+	
 	// now read the entire input file in a while loop!
 	while(av_read_frame(input->context, input->packet) >= 0) {
 
@@ -41,7 +41,7 @@ static void encodeVideo(EncodingJob * encodingJob) {
 		// keep this method as light as possible!
 		av_free_packet(input->packet);
 	}
-	*/
+
 
 	// close both input and output
 	output.OutputClose(job);
