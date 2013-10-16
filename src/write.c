@@ -2,8 +2,6 @@
 
 static void writeAudioFrame(Input * input, Output * job) {
 
-
-
 }
 
 static void writeVideoFrame(Input * input, Output * job) {
@@ -38,10 +36,21 @@ static void writeVideoFrame(Input * input, Output * job) {
 		// set the stream index properly
 		packet.stream_index = job->videoStream->index;
 
+		// resample pts here!
+		/*packet.pts = av_rescale_q();*/
+
+		int64_t dts, pts;
+		int64_t newDts, newPts;
+
+		newPts = av_rescale_q(packet.pts, job->videoCodecContext->time_base, job->videoStream->time_base);
+
+		printf("%" PRIu64 "\n", packet.pts);
+		printf("%" PRIu64 "\n", newPts);
+
+		packet.pts = newPts;
 		// now write the interlaved ppacket
 		// should be 0 on success
-		result = av_write_frame(job->context, &packet);
-
+		result = av_interleaved_write_frame(job->context, &packet);
 
 	} else {
 

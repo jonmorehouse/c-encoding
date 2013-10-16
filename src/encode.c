@@ -20,7 +20,6 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	
 	// this is going to open the input file and give us a handle to grab the streams etc that we want from it
 	// you don't need a decoder -- the whole point of the format context is that it does all of this for you. Allowing you to read packets which give you pieces of the stream!
-	/*AVFormatContext * inputContext = decode.getFormatContext(encodingJob->inputPath);*/
 	Input * input = decode.InputInit(encodingJob->inputPath);
 
 	// initialize the output element
@@ -29,8 +28,8 @@ static void encodeVideo(EncodingJob * encodingJob) {
 	// initialize a packet on the stack for quicker reference
 	AVPacket packet;
 	input->packet = &packet;
-
 	
+
 	// now read the entire input file in a while loop!
 	while(av_read_frame(input->context, input->packet) >= 0) {
 
@@ -41,7 +40,6 @@ static void encodeVideo(EncodingJob * encodingJob) {
 		// keep this method as light as possible!
 		av_free_packet(input->packet);
 	}
-
 
 	// close both input and output
 	output.OutputClose(job);

@@ -59,7 +59,7 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 	codec.openCodec(job, AVMEDIA_TYPE_VIDEO);
 
 	// now that we have opened out codecs etc we need to write the correct headers
-	/*av_dump_format(job->context, 0, encodingJob->outputPath, 1);*/
+	av_dump_format(job->context, 0, encodingJob->outputPath, 1);
 
 	int status;
 
@@ -109,8 +109,9 @@ static Output * OutputInit(const EncodingJob * encodingJob, const Input * input)
 
 static void OutputClose(Output * job) {
 
-	// write the trailer as needed
 	av_write_trailer(job->context);
+
+	return;
 	
 	// now make sure we can safely close the file
 	if (!(job->context->oformat->flags & AVFMT_NOFILE)) {
@@ -124,7 +125,7 @@ static void OutputClose(Output * job) {
 	if (job->packet) av_free_packet(job->packet);
 
 	// now lets see if the frame exists and clear that if necessary
-	/*if (job->frame) avcodec_free_frame(job->frame);*/
+	if (job->frame) avcodec_free_frame(job->frame);
 	
 	// deallocate memory as needed
 	avcodec_close(job->audioCodecContext);
@@ -166,7 +167,7 @@ static void packetHandler(Input * input, Output * job) {
 	// now lets take the packet stream index element 
 	else if (input->packet->stream_index == AVMEDIA_TYPE_AUDIO) {
 
-		/*
+	
 		// decode the input->packet into the input->frame
 		decode.decodeAudio(input);
 
@@ -176,7 +177,6 @@ static void packetHandler(Input * input, Output * job) {
 			// now lets call the correct output audio function
 			write.writeAudioFrame(input, job);	
 		}
-		*/
 	}
 }
 
